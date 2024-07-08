@@ -203,7 +203,8 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 	}
 	return a;
 }
-shared_ptr<Item> nilItem = nullptr;
+Item _nilItem;
+shared_ptr<Item> nilItem = make_shared<Item>(_nilItem);
 struct Planet {
 	string name;
 	unordered_map<string, vector<vector<vector<shared_ptr<Item> > > > > chunks;
