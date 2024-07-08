@@ -117,6 +117,12 @@ struct OreParams {
 	double thresh;
 	short color;
 };
+struct TerrainToolMods {
+	int hardness=0;
+	int range=1;
+	//special effects?
+	string special="";
+};
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -177,7 +183,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 			}
 		}
 	}
-	vector <OreParams > ores = { {"resin",0.5,220} };//in decreasing priority
+	vector <OreParams > ores = { {"resin",0.6,220} };//in decreasing priority
 	for (int i = 0; i < 6; i += 2) {
 		for (int j = 0; j < 16; j++) {
 			for (int k = 0; k < 16; k++) {
@@ -185,7 +191,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 					if (l < 0 || l>255)continue;
 					OreParams p = { "soil",-1,255 };
 					for (int o =0; o < ores.size(); o++) {
-						if (perlin.noise3D((x * 16 + j) * 0.1, (y * 16 + k) * 0.1, (o * 256 * 16 + l)*0.1) > ores[o].thresh) {//dont add more than 16 planets.
+						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 16 + l)*0.2) > ores[o].thresh) {//dont add more than 16 planets.
 							p = ores[o];
 							break;
 						}
@@ -197,6 +203,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 	}
 	return a;
 }
+shared_ptr<Item> nilItem = nullptr;
 struct Planet {
 	string name;
 	unordered_map<string, vector<vector<vector<shared_ptr<Item> > > > > chunks;
@@ -222,15 +229,13 @@ struct Planet {
 	}
 	shared_ptr<Item>& getBlock(int x, int y, int z) {
 		if (z < 0 || z>255) {
-			shared_ptr<Item> a = nullptr;
-			return a;
+			return nilItem;
 		}
 		return getChunk(x >> 4, y >> 4)[z][y & 15][x & 15];
 	}
 	shared_ptr<Item>& setBlock(Item i, int x, int y, int z) {
 		if (z < 0 || z>255) {
-			shared_ptr<Item> a = nullptr;
-			return a;
+			return nilItem;
 		}
 		(getChunk(x >> 4, y >> 4))[z][y & 15][x & 15] = make_shared<Item>(i);
 		return getChunk(x >> 4, y >> 4)[z][y & 15][x & 15];
@@ -426,6 +431,94 @@ void displayItem(shared_ptr<Item>& item, int x, int y) {
 	}
 	return false;
 }*/
+vector<shared_ptr<Item>> destroyTerrain(Update u, int hardness, int range) {//VERY inefficient
+	//TODO:factor in special mods
+	u.totalPower = range;
+	vector<Update> queue = { u }, network = {};
+	while (!queue.empty()) {
+		auto i = queue[queue.size()-1];
+		queue.pop_back();
+		if (find(network.begin(), network.end(), i) != network.end())continue;
+		if (!(i.getBlock() == nullptr)) {
+			if (!i.getBlock()->id.ends_with("_placed"))continue;
+			network.push_back(i);
+			int remove = hardness - i.getBlock()->dmg;
+			if (remove > 1)i.totalPower -= remove;
+			else i.totalPower -= 1;
+			if (i.totalPower < 0)continue;
+		}
+		else {
+			network.push_back(i);
+			i.totalPower -= 1;
+			if (i.totalPower < 0)continue;//unfortunately due to lasagna caves we cannot not remove power
+		}
+		auto n = i.neighbors();
+		for (auto j : n) {
+			queue.push_back(j);
+		}
+	}
+	vector<shared_ptr<Item>> res = { createItem({"soil",(255 << 16) | '-',{},1,0}) };
+	for (auto& a : network) {
+		auto& block = a.getBlock();
+		if (block == nullptr)continue;
+		if (block->id == "soil_placed")res[0]->dmg++;
+		else {
+			block->id.erase(block->id.size() - (string("_placed").size()));
+			block->id = "resource_" + block->id;
+			block->size = 1;
+			block->dmg = 255;
+			block->display = ((block->display >> 16) << 16) | '*';
+			res.push_back(createItem(*block));
+		}
+		a.getBlock() = nullptr;
+	}
+	return res;
+}
+void givePlayer(shared_ptr<Item> a) {
+	for (auto& i : player.item->slots) {
+		if (i.locked)continue;
+		if (i.content != nullptr)continue;
+		if (i.sorter!="air"&&i.sorter != a->id)continue;
+		if (i.size < a->size||i.size != a->size && !i.uni)continue;
+		i.content = a;
+		return;
+	}
+	Update u = { player.planet,player.x,player.y,player.z };
+	vector<Update> queue = { u }, network = {};
+	while (!queue.empty()) {
+		auto i = queue[0];
+		queue.erase(queue.begin(),queue.begin()+1);
+		if (find(network.begin(), network.end(), i) != network.end())continue;
+		if (i.getBlock() == nullptr) {
+			if (i.getBlock() == nilItem)continue;
+			i.getBlock() = a;
+			return;
+		}
+		network.push_back(i);
+		auto n = i.neighbors();
+		for (auto j : n) {
+			queue.push_back(j);
+		}
+	}
+	throw "Failed to throw item";
+}
+TerrainToolMods getTerrainToolMods() {//only the first special mod can function
+	TerrainToolMods mods;
+	shared_ptr<Item> tool = player.item->slots[2].content;
+	for (auto a : tool->slots) {
+		if (a.content == nullptr)continue;
+		string id = a.content->id;
+		if (id.starts_with("mod_drill_")) {
+			mods.hardness += a.content->cfg;
+		}else if (id.starts_with("mod_range_")) {
+			mods.range += a.content->cfg;
+		}
+		else {
+			mods.special = id;
+		}
+	}
+	return mods;
+}
 void processCursor() {
 	if (cursorObj != nullptr && cursorObj->id.starts_with("printer")) {
 		if (key == 'y')cursorObj->cfg++;
@@ -503,12 +596,30 @@ void processCursor() {
 			for (auto& i : block->slots) {
 				if (i.content != nullptr)continue;
 				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+				//potential lack of sorter check?
 				i.content = player.item->slots[3].content;
 				player.item->slots[3].content = nullptr;
 				break;
 			}
 			player.updates.push_back({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff });
 			player.updates.push_back({ player.planet,player.x,player.y,player.z });
+		}
+		if (key == 'x') {
+			TerrainToolMods mods = getTerrainToolMods();
+			auto res = destroyTerrain({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff }, mods.hardness, mods.range);
+			for (auto& a : player.item->slots) {
+				if (a.content!=nullptr&&a.content->id == "soil" && a.content->dmg != 256) {
+					res[0]->dmg += a.content->dmg;
+					a.content = nullptr;
+				}
+			}
+			while (res[0]->dmg > 255) {
+				res[0]->dmg -= 256;
+				givePlayer(createItem({"soil",(255<<16)|'-',{},1,256}));
+			}
+			for (auto a : res) {
+				givePlayer(a);
+			}
 		}
 		break;
 	case 1:
@@ -796,6 +907,7 @@ int main() {
 			}, 2, 4, 0);
 		planets["Sylva"].setBlock({ "battery_small",(255 << 16) | '@',{},1 ,0,1 }, 2, 5, 0);
 		player.updates.push_back({ "Sylva",1,1,0 });
+		saveGame();
 	}
 	else {
 		loadGame();
