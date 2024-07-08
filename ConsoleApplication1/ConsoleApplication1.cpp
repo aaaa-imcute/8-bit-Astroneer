@@ -490,8 +490,8 @@ void givePlayer(shared_ptr<Item> a) {
 		auto i = queue[0];
 		queue.erase(queue.begin(),queue.begin()+1);
 		if (find(network.begin(), network.end(), i) != network.end())continue;
+		if (i.getBlock() == nilItem)continue;
 		if (i.getBlock() == nullptr) {
-			if (i.getBlock() == nilItem)continue;
 			i.getBlock() = a;
 			return;
 		}
