@@ -137,6 +137,9 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	else if (id == "battery_small") {
 		s.stored.push_back({ 320,10,that ,(dmg>=320?1:(dmg<=0?-1:0))});
 	}
+	else if (id == "player_battery") {
+		s.stored.push_back({ 100,10,that ,(dmg >= 100 ? 1 : (dmg <= 0 ? -1 : 0)) });
+	}
 	else if (id == "platform_printer_small") {
 		s.used = 10;
 	}
@@ -303,6 +306,9 @@ int cursorAt = 0;
 int cursorSel = 0;
 int cursorX = 0, cursorY = 0;
 int cursorObjx, cursorObjy, cursorObjz;
+bool oxygenDeducted = false;
+int playerSpeed = 2;
+bool flight = true;
 string cursorObjplanet;
 shared_ptr<Item> cursorObj;
 enum DisplayMode {
@@ -510,9 +516,9 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 		if (a.content == nullptr)continue;
 		string id = a.content->id;
 		if (id.starts_with("mod_drill_")) {
-			mods.hardness += a.content->cfg;
+			mods.hardness += a.content->dmg;
 		}else if (id.starts_with("mod_range_")) {
-			mods.range += a.content->cfg;
+			mods.range += a.content->dmg;
 		}
 		else {
 			mods.special = id;
@@ -558,7 +564,7 @@ void processCursor() {
 	}
 	auto& block = planets[player.planet].getBlock(cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff);
 	switch (cursorAt) {
-	case 0:
+	case 0://note:possble bugs related to block placing/removing off height limits
 		if (key == 'i')cursorSel -= 17;
 		if (key == 'k')cursorSel += 17;
 		if (key == 'j')cursorSel -= 1;
@@ -729,30 +735,47 @@ void processCursor() {
 	}
 }
 void processPlayer() {
+	oxygenDeducted = false;
 	if (key == '1')dmode = DNORM;
 	if (key == '2')dmode = DUNDER;
 	if (key == '3')dmode = DABOVE;
 	if (key == '4')dmode = DDEPTH;
 
 	int px = player.x, py = player.y, pz = player.z;
-	if (key == 'w')player.y -= 1;
-	if (key == 's')player.y += 1;
-	if (key == 'a')player.x -= 1;
-	if (key == 'd')player.x += 1;
-	if (key == 'e')player.z -= 1;
-	if (key == 'q')player.z += 1;
-	if (player.z<0||player.z>255||planets[player.planet].getBlock(player.x, player.y, player.z) != nullptr) {
-		player.x = px;
-		player.y = py;
-		player.z = pz;
+	if(!flight)player.z -= 1;
+	if (player.z < 0 || player.z>255 || planets[player.planet].getBlock(player.x, player.y, player.z) != nullptr) {
+		player.z++;
 	}
-	auto& pplayer = planets[player.planet].getBlock(player.x, player.y, player.z);
-	if (pplayer == player.item)return;
-	pplayer = player.item;
-	player.item = pplayer;
-	planets[player.planet].removeBlock(px, py, pz);
+	else {
+		auto& pplayer = planets[player.planet].getBlock(player.x, player.y, player.z);
+		if (pplayer == player.item)return;
+		pplayer = player.item;
+		player.item = pplayer;
+		planets[player.planet].removeBlock(px, py, pz);
+		player.updates.push_back({ player.planet,player.x,player.y,player.z });
+	}
+	for (int i = 0; i < playerSpeed; i++) {
+		int px = player.x, py = player.y, pz = player.z;
+		if (key == 'w')player.y -= 1;
+		if (key == 's')player.y += 1;
+		if (key == 'a')player.x -= 1;
+		if (key == 'd')player.x += 1;
+		if (key == 'e')player.z -= 1;
+		if (key == 'q')player.z += 1;
+		if (player.z < 0 || player.z>255 || planets[player.planet].getBlock(player.x, player.y, player.z) != nullptr) {
+			player.x = px;
+			player.y = py;
+			player.z = pz;
+		}
+		auto& pplayer = planets[player.planet].getBlock(player.x, player.y, player.z);
+		if (pplayer == player.item)return;
+		pplayer = player.item;
+		player.item = pplayer;
+		planets[player.planet].removeBlock(px, py, pz);
+		player.updates.push_back({ player.planet,player.x,player.y,player.z });
+	}
 }
-void processPacemaker(Update u, shared_ptr<Item> block);
+void processPacemaker(Update u, shared_ptr<Item> block,bool slotted);
 void processMisc(Update u, shared_ptr<Item> block,bool slotted);
 void processUpdate(Update u,shared_ptr<Item> block) {
 	if (block == nullptr)return;
@@ -774,7 +797,7 @@ void processUpdate(Update u) {
 void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	string id = block->id;
 	if (id == "platform_pacemaker") {
-		processPacemaker(u, block);
+		processPacemaker(u, block,slotted);
 	}
 	else if (id == "platform_test_siren") {
 		block->cfg += 17;
@@ -816,8 +839,14 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->cfg %= 256;
 		block->display = block->cfg << 16 | '@';
 	}
+	else if (id == "player_oxygen_tank") {//TODO:actually making an oxygen system and respawn system
+		if (oxygenDeducted)return;
+		oxygenDeducted = true;
+		block->dmg--;
+		if (block->dmg <= 0)throw "You died";
+	}
 }
-void processPacemaker(Update u, shared_ptr<Item> block) {
+void processPacemaker(Update u, shared_ptr<Item> block,bool slotted) {
 	player.updates.push_back(u);
 	vector<Update> queue;
 	queue.push_back(u);
@@ -828,6 +857,7 @@ void processPacemaker(Update u, shared_ptr<Item> block) {
 		queue.pop_back();
 		if (find(network.begin(), network.end(), t) != network.end())continue;
 		network.push_back(t);
+		if (t.getBlock()->id == "player_oxygen_tank" && !slotted)t.getBlock()->dmg = 90;
 		auto n = t.neighbors();
 		for (int i = 0; i < 6; i++) {
 			Update x = n[i];
@@ -891,6 +921,7 @@ int main() {
 			{1,nullptr},
 			{1,nullptr},
 			{1,nullptr},
+			{1,make_shared<Item>(Item{ "platform_pacemaker",(255 << 16) | '@',{},1 }),true},
 		},256 }, 0, 0, 0);
 		player.x = player.y = player.z = 0;
 		player.planet = "Sylva";
