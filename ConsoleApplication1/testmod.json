@@ -1,0 +1,38 @@
+{
+    "mod": {
+        "description": "This is a test mod.It does not have any use.Do not load it.",
+        "recipes": [
+            {
+                "key": "test",
+                "value": [
+                    {
+                        "first": [
+                            "a"
+                        ],
+                        "second": {
+                            "id": "testitem1",
+                            "display": 8388671,
+                            "slots": [],
+                            "size": -1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "b"
+                        ],
+                        "second": {
+                            "id": "testitem2",
+                            "display": 8388671,
+                            "slots": [],
+                            "size": -1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

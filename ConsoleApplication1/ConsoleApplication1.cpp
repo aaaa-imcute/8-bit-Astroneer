@@ -15,14 +15,19 @@
 #include<cstring>
 #include<fstream>
 #include<filesystem>
+#include<iterator>
 #include"cereal/archives/portable_binary.hpp"
+#include"cereal/archives/json.hpp"
 #include "cereal/types/memory.hpp"
 #include "cereal/types/vector.hpp"
 #include "cereal/types/string.hpp"
+#include "cereal/types/unordered_map.hpp"
+#include "cereal/types/utility.hpp"
 #include "PerlinNoise.hpp"
 #define uint unsigned int
 #define W 100
 #define H 50
+#define cpair cereal::make_nvp
 using namespace std;
 vector<vector<uint> > buf(H, vector<uint>(W, (32 << 16) | ' '));
 char key = 0;
@@ -48,7 +53,7 @@ void init() {
 	cout.setf(ios::unitbuf);
 	cout << "\033[3J\033[1;1HPress any key to continue";
 	cout.flush();
-	_getch();
+	_getch();//return value ignore.
 }
 const siv::PerlinNoise::seed_type noiseSeed = 123456u;
 const siv::PerlinNoise perlin{ noiseSeed };
@@ -82,7 +87,7 @@ struct Item {
 	template<class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(id,display,slots,size,dmg,cfg);
+		ar(cpair("id",id), cpair("display",display), cpair("slots",slots), cpair("size",size), cpair("dmg",dmg), cpair("cfg",cfg));
 	}
 };
 struct Slot {
@@ -98,7 +103,7 @@ struct Slot {
 	template<class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(size,content,locked,sorter,uni,qTrig);
+		ar(cpair("size",size), cpair("content",content), cpair("locked",locked), cpair("sorter",sorter), cpair("uni",uni), cpair("qTrig",qTrig));
 	}
 };
 struct BatteryStatus {
@@ -297,11 +302,16 @@ struct Update {
 	template<class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(planet,x,y,z,totalPower,usedPower);
+		ar(cpair("planet",planet), cpair("x",x), cpair("y",y), cpair("z",z), cpair("totalPower",totalPower), cpair("usedPower",usedPower));
 	}
 };
 vector<Update> _updates;
 unordered_map<string, int> updatesDone;
+unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes = {
+	{"platform_printer_small",{
+		{{"resin"},{ "platform_medium_a",(255 << 16) | '#', {{1,createNull(),false,"air",true}}, 2}}
+	}}
+};
 int cursorAt = 0;
 int cursorSel = 0;
 int cursorX = 0, cursorY = 0;
@@ -325,7 +335,7 @@ struct PlayerData {
 	template<class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(x,y,z,planet,updates);
+		ar(cpair("x",x), cpair("y",y), cpair("z",z), cpair("planet",planet), cpair("updates",updates));
 	}
 } player;
 template<class T>
@@ -794,6 +804,33 @@ void processUpdate(Update u) {
 	}
 	processMisc(u,block,false);
 }
+void processPrinter(Update u, shared_ptr<Item> block) {
+	if (u.funnyPower())return;
+	block->dmg += u.lackPower(32);
+	if (block->dmg >= 255) {
+		if (block->slots[block->slots.size() - 1].content != nullptr)return;
+		vector<string> key;
+		for (int i = 0; i < block->slots.size() - 1; i++) {
+			if (block->slots[i].content == nullptr)continue;
+			if (!block->slots[i].content->id.starts_with("resource_"))continue;
+			key.push_back(block->slots[i].content->id.substr(string("resource_").size()));
+		}
+		int cfg = block->cfg;
+		for (auto& i : printerRecipes[block->id]) {
+			if (key == i.first) {
+				if (cfg) {
+					cfg--;
+					continue;
+				}
+				block->slots[block->slots.size() - 1].content = createItem(i.second);
+				block->dmg = 0;
+				for (int i = 0; i < block->slots.size() - 1; i++) {
+					block->slots[i].content = nullptr;
+				}
+			}
+		}
+	}
+}
 void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	string id = block->id;
 	if (id == "platform_pacemaker") {
@@ -805,34 +842,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->display = block->cfg << 16 | '@';
 	}
 	else if (id == "platform_printer_small") {
-		if (u.funnyPower())return;
-		vector<pair<vector<string>, Item> > recipes = {//no unordered_map >:(
-			{{"resin"},{ "platform_medium_a",(255 << 16) | '#', {{1,createNull(),false,"air",true}}, 2}}
-		};
-		block->dmg += u.lackPower(32);
-		if (block->dmg >= 255) {
-			if (block->slots[block->slots.size() - 1].content != nullptr)return;
-			vector<string> key;
-			for (int i = 0; i < block->slots.size() - 1; i++) {
-				if (block->slots[i].content == nullptr)continue;
-				if (!block->slots[i].content->id.starts_with("resource_"))continue;
-				key.push_back(block->slots[i].content->id.substr(string("resource_").size()));
-			}
-			int cfg = block->cfg;
-			for (auto& i : recipes) {
-				if (key == i.first) {
-					if (cfg) {
-						cfg--;
-						continue;
-					}
-					block->slots[block->slots.size() - 1].content = createItem(i.second);
-					block->dmg = 0;
-					for (int i = 0; i < block->slots.size() - 1; i++) {
-						block->slots[i].content = nullptr;
-					}
-				}
-			}
-		}
+		processPrinter(u, block);
 	}else if (id == "test_power_siren") {
 		if (u.funnyPower())return;
 		block->cfg += u.lackPower(17);
@@ -896,8 +906,44 @@ void processPacemaker(Update u, shared_ptr<Item> block,bool slotted) {
 		processUpdate(i);
 	}
 }
+struct Mod {
+	string description;
+	unordered_map<string, vector<pair<vector<string>, Item> > > recipes;
+	template<class Archive>
+	void serialize(Archive& ar)
+	{
+		ar(cpair("description",description),cpair("recipes", recipes));
+	}
+};
+void loadMods() {
+	for (const auto& entry : filesystem::directory_iterator(".\\mods\\")) {
+		if (!entry.is_regular_file())continue;
+		ifstream f;
+		f.open(entry.path());
+		if (!f.good())continue;
+		cereal::JSONInputArchive ain(f);
+		Mod m;
+		ain(cpair("mod",m));
+		for (auto& r : m.recipes) {
+			for (auto& k : r.second) {
+				printerRecipes[r.first].push_back(k);
+			}
+		}
+	}
+}
+void test() {
+	Mod m;
+	m.description = "This is a test mod.It does not have any use.Do not load it.";
+	m.recipes["test"] = { {{"a"},{"testitem1"}},{{"b"},{"testitem2"}} };
+	ofstream f;
+	f.open(".\\testmod.json");
+	cereal::JSONOutputArchive aout(f);
+	aout(cpair("mod",m));
+}
 int main() {
 	init();
+	if(0)test();
+	loadMods();
 	planets["Sylva"] = { "Sylva" };
 	cursorObj = nullptr;
 	if (!filesystem::is_directory(".\\save\\")|| !filesystem::is_directory(".\\save\\world\\")) {
