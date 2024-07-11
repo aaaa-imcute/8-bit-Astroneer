@@ -28,6 +28,7 @@
 #define W 100
 #define H 50
 #define cpair cereal::make_nvp
+#define MOD_DEV 0
 using namespace std;
 vector<vector<uint> > buf(H, vector<uint>(W, (32 << 16) | ' '));
 char key = 0;
@@ -128,6 +129,7 @@ struct TerrainToolMods {
 	//special effects?
 	string special="";
 };
+unordered_map<string, vector<int>> powerMap;
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -136,17 +138,10 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	else if (id == "test_power_void") {
 		s.used = cfg;
 	}
-	else if (id == "test_power_siren") {
-		s.used = 10;
-	}
-	else if (id == "battery_small") {
-		s.stored.push_back({ 320,10,that ,(dmg>=320?1:(dmg<=0?-1:0))});
-	}
-	else if (id == "player_battery") {
-		s.stored.push_back({ 100,10,that ,(dmg >= 100 ? 1 : (dmg <= 0 ? -1 : 0)) });
-	}
-	else if (id == "platform_printer_small") {
-		s.used = 10;
+	if (powerMap.find(id) != powerMap.end()) {
+		s.produced = powerMap[id][0];
+		s.used = powerMap[id][1];
+		if(powerMap[id][2])s.stored.push_back({ powerMap[id][2],powerMap[id][3],that,(dmg >= powerMap[id][2] ? 1 : (dmg <= 0 ? -1 : 0)) });
 	}
 	for (Slot& a : slots) {
 		if (a.content == nullptr)continue;
@@ -307,11 +302,7 @@ struct Update {
 };
 vector<Update> _updates;
 unordered_map<string, int> updatesDone;
-unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes = {
-	{"platform_printer_small",{
-		{{"resin"},{ "platform_medium_a",(255 << 16) | '#', {{1,createNull(),false,"air",true}}, 2}}
-	}}
-};
+unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes;
 int cursorAt = 0;
 int cursorSel = 0;
 int cursorX = 0, cursorY = 0;
@@ -909,15 +900,17 @@ void processPacemaker(Update u, shared_ptr<Item> block,bool slotted) {
 struct Mod {
 	string description;
 	unordered_map<string, vector<pair<vector<string>, Item> > > recipes;
+	unordered_map<string, vector<int>> power;
 	template<class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(cpair("description",description),cpair("recipes", recipes));
+		ar(cpair("description",description),cpair("recipes", recipes),cpair("power",power));
 	}
 };
 void loadMods() {
 	for (const auto& entry : filesystem::directory_iterator(".\\mods\\")) {
 		if (!entry.is_regular_file())continue;
+		if (entry.path().extension() != ".mod"&&!MOD_DEV)continue;
 		ifstream f;
 		f.open(entry.path());
 		if (!f.good())continue;
@@ -929,12 +922,16 @@ void loadMods() {
 				printerRecipes[r.first].push_back(k);
 			}
 		}
+		for (auto& r : m.power) {
+			powerMap[r.first] = r.second;
+		}
 	}
 }
 void test() {
 	Mod m;
 	m.description = "This is a test mod.It does not have any use.Do not load it.";
-	m.recipes["test"] = { {{"a"},{"testitem1"}},{{"b"},{"testitem2"}} };
+	m.recipes["test"] = { {{"a"},{"testitem1",(255 << 16) | '#',{{1,createItem({"testitem2",(128 << 16) | '?',{},1}),false,"air",true}},2}},{{"b"},{"testitem2",(255 << 16) | '-',{{1,createNull(),false,"air",true}},2}} };
+	m.power["test"] = {1,2,3,4};
 	ofstream f;
 	f.open(".\\testmod.json");
 	cereal::JSONOutputArchive aout(f);
@@ -942,11 +939,11 @@ void test() {
 }
 int main() {
 	init();
-	if(0)test();
+	if(MOD_DEV)test();
 	loadMods();
 	planets["Sylva"] = { "Sylva" };
 	cursorObj = nullptr;
-	if (!filesystem::is_directory(".\\save\\")|| !filesystem::is_directory(".\\save\\world\\")) {
+	if (1||!filesystem::is_directory(".\\save\\")|| !filesystem::is_directory(".\\save\\world\\")) {
 		filesystem::create_directory(".\\save\\");
 		filesystem::create_directory(".\\save\\world\\");
 		for (int i = 0; i < 256; i++) {
