@@ -11,9 +11,30 @@
                         ],
                         "second": {
                             "id": "testitem1",
-                            "display": 8388671,
-                            "slots": [],
-                            "size": -1,
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 2147483649,
+                                            "data": {
+                                                "id": "testitem2",
+                                                "display": 8388671,
+                                                "slots": [],
+                                                "size": 1,
+                                                "dmg": 0,
+                                                "cfg": 0
+                                            }
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
                             "dmg": 0,
                             "cfg": 0
                         }
@@ -24,13 +45,37 @@
                         ],
                         "second": {
                             "id": "testitem2",
-                            "display": 8388671,
-                            "slots": [],
-                            "size": -1,
+                            "display": 16711725,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
                             "dmg": 0,
                             "cfg": 0
                         }
                     }
+                ]
+            }
+        ],
+        "power": [
+            {
+                "key": "test",
+                "value": [
+                    1,
+                    2,
+                    3,
+                    4
                 ]
             }
         ]
