@@ -24,11 +24,11 @@
 #include "cereal/types/unordered_map.hpp"
 #include "cereal/types/utility.hpp"
 #include "PerlinNoise.hpp"
-#define uint unsigned int
-#define W 100
-#define H 50
-#define cpair cereal::make_nvp
-#define MOD_DEV 0
+using uint = unsigned int;
+using cereal::make_nvp;
+constexpr auto W = 100;
+constexpr auto H = 50;
+constexpr auto MOD_DEV = 0;
 using namespace std;
 vector<vector<uint> > buf(H, vector<uint>(W, (32 << 16) | ' '));
 char key = 0;
@@ -62,9 +62,9 @@ struct PowerStatus;
 struct Slot;
 struct Item {
 	string id;
-	uint display=128<<16|'?';//oops
+	uint display = 128 << 16 | '?';//oops
 	vector<Slot> slots;
-	int size=-1;//oops
+	int size = -1;//oops
 	int dmg = 0;
 	int cfg = 0;
 	//int facing = 0;
@@ -86,25 +86,23 @@ struct Item {
 		}
 	}*/
 	template<class Archive>
-	void serialize(Archive& ar)
-	{
-		ar(cpair("id",id), cpair("display",display), cpair("slots",slots), cpair("size",size), cpair("dmg",dmg), cpair("cfg",cfg));
+	void serialize(Archive& ar) {
+		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg));
 	}
 };
 struct Slot {
-	int size=-1;//oops
+	int size = -1;//oops
 	shared_ptr<Item> content;
 	bool locked = false;
 	string sorter = "air";
 	bool uni = false;
 	char qTrig = 0;
-	bool isFree() {
+	bool isFree() const {
 		return content == nullptr;
 	}
 	template<class Archive>
-	void serialize(Archive& ar)
-	{
-		ar(cpair("size",size), cpair("content",content), cpair("locked",locked), cpair("sorter",sorter), cpair("uni",uni), cpair("qTrig",qTrig));
+	void serialize(Archive& ar) {
+		ar(make_nvp("size", size), make_nvp("content", content), make_nvp("locked", locked), make_nvp("sorter", sorter), make_nvp("uni", uni), make_nvp("qTrig", qTrig));
 	}
 };
 struct BatteryStatus {
@@ -113,9 +111,9 @@ struct BatteryStatus {
 	shared_ptr<Item> item;
 	int emptiness = 0;
 };
-struct PowerStatus{
-	int used=0;
-	int produced=0;
+struct PowerStatus {
+	int used = 0;
+	int produced = 0;
 	vector<BatteryStatus> stored = {};
 };
 struct OreParams {
@@ -124,10 +122,10 @@ struct OreParams {
 	short color;
 };
 struct TerrainToolMods {
-	int hardness=0;
-	int range=1;
+	int hardness = 0;
+	int range = 1;
 	//special effects?
-	string special="";
+	string special = "";
 };
 unordered_map<string, vector<int>> powerMap;
 PowerStatus Item::getPower(shared_ptr<Item> that) {
@@ -141,7 +139,7 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	if (powerMap.find(id) != powerMap.end()) {
 		s.produced = powerMap[id][0];
 		s.used = powerMap[id][1];
-		if(powerMap[id][2])s.stored.push_back({ powerMap[id][2],powerMap[id][3],that,(dmg >= powerMap[id][2] ? 1 : (dmg <= 0 ? -1 : 0)) });
+		if (powerMap[id][2])s.stored.push_back({ powerMap[id][2],powerMap[id][3],that,(dmg >= powerMap[id][2] ? 1 : (dmg <= 0 ? -1 : 0)) });
 	}
 	for (Slot& a : slots) {
 		if (a.content == nullptr)continue;
@@ -182,7 +180,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 		for (int j = 0; j < 16; j++) {
 			heightmap[i][j].resize(16);
 			for (int k = 0; k < 16; k++) {
-				heightmap[i][j][k] = 4*perlin.noise3D((x*16+j) * 0.1, (y*16+k) * 0.1, i)+10*i;
+				heightmap[i][j][k] = 4 * perlin.noise3D((x * 16 + j) * 0.1, (y * 16 + k) * 0.1, i) + 10 * i;
 			}
 		}
 	}
@@ -193,13 +191,13 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 				for (int l = heightmap[i][j][k]; l < heightmap[i + 1][j][k]; l++) {
 					if (l < 0 || l>255)continue;
 					OreParams p = { "soil",-1,255 };
-					for (int o =0; o < ores.size(); o++) {
-						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 16 + l)*0.2) > ores[o].thresh) {//dont add more than 16 planets.
+					for (int o = 0; o < ores.size(); o++) {
+						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 16 + l) * 0.2) > ores[o].thresh) {//dont add more than 16 planets.
 							p = ores[o];
 							break;
 						}
 					}
-					a[l][k][j] = createItem({ p.id+"_placed",uint(p.color) << 16 | '-',{},256,3 - i/2+planetDiff });
+					a[l][k][j] = createItem({ p.id + "_placed",uint(p.color) << 16 | '-',{},256,3 - i / 2 + planetDiff });
 				}
 			}
 		}
@@ -216,7 +214,7 @@ struct Planet {
 		auto a = chunks.find(cid);
 		if (a == chunks.end()) {
 			ifstream f;
-			f.open((".\\save\\world\\chunk_" + name + "_" + cid + ".bin").c_str(),ios::binary);
+			f.open((".\\save\\world\\chunk_" + name + "_" + cid + ".bin").c_str(), ios::binary);
 			if (f.good()) {
 				cereal::PortableBinaryInputArchive ain(f);
 				vector<vector<vector<shared_ptr<Item> > > > chunk;
@@ -224,7 +222,7 @@ struct Planet {
 				chunks.insert({ cid,chunk });
 				return chunks[cid];
 			}
-			chunks.insert({ cid,createChunk(name, x, y)});
+			chunks.insert({ cid,createChunk(name, x, y) });
 			return chunks[cid];
 		}
 		else {
@@ -251,14 +249,14 @@ struct Planet {
 };
 unordered_map<string, Planet> planets;
 struct Update {
-	string planet="lulz";
-	int x=420;
-	int y=69;
-	int z=1337;//if you see those funny numbers its because you made a mistake that made uninitialized update structs which vs told me to initialize values for.
-	int totalPower=80;
-	int usedPower=14;
+	string planet = "lulz";
+	int x = 420;
+	int y = 69;
+	int z = 1337;//if you see those funny numbers its because you made a mistake that made uninitialized update structs which vs told me to initialize values for.
+	int totalPower = 80;
+	int usedPower = 14;
 	int flags = 0;
-	static Update fromOther(Update u,int x,int y,int z){
+	static Update fromOther(Update u, int x, int y, int z) {
 		u.x = x;
 		u.y = y;
 		u.z = z;
@@ -273,7 +271,7 @@ struct Update {
 	string toString() const {
 		return "Update_" + planet + "_" + to_string(x) + "_" + to_string(y) + "_" + to_string(z) + "_" + to_string(totalPower) + "_" + to_string(usedPower);
 	}
-	shared_ptr<Item>& getBlock() {
+	shared_ptr<Item>& getBlock() const {
 		return planets[planet].getBlock(x, y, z);
 	}
 	vector<Update> neighbors() {
@@ -286,18 +284,17 @@ struct Update {
 			fromOther(*this,x, y, z - 1),
 		};
 	}
-	int lackPower(int x) {
+	int lackPower(int x) const {
 		if (usedPower == 0)return x;
 		if (totalPower > usedPower)return x;
 		return x * totalPower / usedPower;//do not switch order
 	}
-	bool funnyPower() {
+	bool funnyPower() const {
 		return !(flags & 1);//no more funny power
 	}
 	template<class Archive>
-	void serialize(Archive& ar)
-	{
-		ar(cpair("planet",planet), cpair("x",x), cpair("y",y), cpair("z",z), cpair("totalPower",totalPower), cpair("usedPower",usedPower));
+	void serialize(Archive& ar) {
+		ar(make_nvp("planet", planet), make_nvp("x", x), make_nvp("y", y), make_nvp("z", z), make_nvp("totalPower", totalPower), make_nvp("usedPower", usedPower));
 	}
 };
 vector<Update> _updates;
@@ -320,13 +317,12 @@ enum DisplayMode {
 } dmode;
 struct PlayerData {
 	shared_ptr<Item> item;
-	int x=0, y=0, z=0;
-	string planet="Sylva";
+	int x = 0, y = 0, z = 0;
+	string planet = "Sylva";
 	vector<Update> updates;
 	template<class Archive>
-	void serialize(Archive& ar)
-	{
-		ar(cpair("x",x), cpair("y",y), cpair("z",z), cpair("planet",planet), cpair("updates",updates));
+	void serialize(Archive& ar) {
+		ar(make_nvp("x", x), make_nvp("y", y), make_nvp("z", z), make_nvp("planet", planet), make_nvp("updates", updates));
 	}
 } player;
 template<class T>
@@ -345,7 +341,7 @@ void saveGame() {
 	for (auto& p : planets) {
 		auto& planet = p.second;
 		for (auto& c : planet.chunks) {
-			saveFile(".\\save\\world\\chunk_" + planet.name + "_" + c.first + ".bin",c.second);
+			saveFile(".\\save\\world\\chunk_" + planet.name + "_" + c.first + ".bin", c.second);
 		}
 	}
 	saveFile(".\\save\\level.bin", player);
@@ -377,25 +373,25 @@ void displayWorld() {
 	for (int i = -8; i < 9; i++) {
 		for (int j = -8; j < 9; j++) {
 			switch (dmode) {
-			case DNORM:
-				a = planets[player.planet].getBlock(player.x + i, player.y + j, player.z);
-				if(a!=nullptr)buf[j + 8][i + 8] = a->display;
-				break;
-			case DUNDER:
-				a = planets[player.planet].getBlock(player.x + i, player.y + j, player.z-1);
-				if (a != nullptr)buf[j + 8][i + 8] = a->display;
-				break;
-			case DABOVE:
-				a = planets[player.planet].getBlock(player.x + i, player.y + j, player.z + 1);
-				if (a != nullptr)buf[j + 8][i + 8] = a->display;
-				break;
-			case DDEPTH:
-				int k = player.z;
-				do {
-					a = planets[player.planet].getBlock(player.x + i, player.y + j, k);
-				} while (--k>=0&&a==nullptr);
-				if (a != nullptr&&player.z-k-1<10)buf[j + 8][i + 8] = (255<<16)|('0'+(player.z-k-1));
-				break;
+				case DNORM:
+					a = planets[player.planet].getBlock(player.x + i, player.y + j, player.z);
+					if (a != nullptr)buf[j + 8][i + 8] = a->display;
+					break;
+				case DUNDER:
+					a = planets[player.planet].getBlock(player.x + i, player.y + j, player.z - 1);
+					if (a != nullptr)buf[j + 8][i + 8] = a->display;
+					break;
+				case DABOVE:
+					a = planets[player.planet].getBlock(player.x + i, player.y + j, player.z + 1);
+					if (a != nullptr)buf[j + 8][i + 8] = a->display;
+					break;
+				case DDEPTH:
+					int k = player.z;
+					do {
+						a = planets[player.planet].getBlock(player.x + i, player.y + j, k);
+					} while (--k >= 0 && a == nullptr);
+					if (a != nullptr && player.z - k - 1 < 10)buf[j + 8][i + 8] = (255 << 16) | ('0' + (player.z - k - 1));
+					break;
 			}
 		}
 	}
@@ -414,9 +410,9 @@ void displayNumber(int num, int x, int y) {
 void displayItem(shared_ptr<Item>& item, int x, int y) {
 	if (item == nullptr) {
 		clearRect(x, y, 3, 1);
-		buf[y][x] = (255<<16)|'n';
-		buf[y][x + 1] = (255<<16)|'i';
-		buf[y][x + 2] = (255<<16)|'l';
+		buf[y][x] = (255 << 16) | 'n';
+		buf[y][x + 1] = (255 << 16) | 'i';
+		buf[y][x + 2] = (255 << 16) | 'l';
 		return;
 	}
 	clearRect(x, y, max(int(item->id.size()), 12), int(item->slots.size()) + 2);
@@ -444,7 +440,7 @@ vector<shared_ptr<Item>> destroyTerrain(Update u, int hardness, int range) {//VE
 	u.totalPower = range;
 	vector<Update> queue = { u }, network = {};
 	while (!queue.empty()) {
-		auto i = queue[queue.size()-1];
+		auto i = queue[queue.size() - 1];
 		queue.pop_back();
 		if (find(network.begin(), network.end(), i) != network.end())continue;
 		if (!(i.getBlock() == nullptr)) {
@@ -486,8 +482,8 @@ void givePlayer(shared_ptr<Item> a) {
 	for (auto& i : player.item->slots) {
 		if (i.locked)continue;
 		if (i.content != nullptr)continue;
-		if (i.sorter!="air"&&i.sorter != a->id)continue;
-		if (i.size < a->size||i.size != a->size && !i.uni)continue;
+		if (i.sorter != "air" && i.sorter != a->id)continue;
+		if (i.size < a->size || i.size != a->size && !i.uni)continue;
 		i.content = a;
 		return;
 	}
@@ -495,7 +491,7 @@ void givePlayer(shared_ptr<Item> a) {
 	vector<Update> queue = { u }, network = {};
 	while (!queue.empty()) {
 		auto i = queue[0];
-		queue.erase(queue.begin(),queue.begin()+1);
+		queue.erase(queue.begin(), queue.begin() + 1);
 		if (find(network.begin(), network.end(), i) != network.end())continue;
 		if (i.getBlock() == nilItem)continue;
 		if (i.getBlock() == nullptr) {
@@ -518,7 +514,8 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 		string id = a.content->id;
 		if (id.starts_with("mod_drill_")) {
 			mods.hardness += a.content->dmg;
-		}else if (id.starts_with("mod_range_")) {
+		}
+		else if (id.starts_with("mod_range_")) {
 			mods.range += a.content->dmg;
 		}
 		else {
@@ -551,188 +548,188 @@ void processCursor() {
 	}
 	int yoff;
 	switch (dmode) {
-	case DNORM:
-		yoff = 0;
-		break;
-	case DUNDER:
-		yoff = -1;
-		break;
-	case DABOVE:
-		yoff = 1;
-		break;
-	case DDEPTH:
-		return;
+		case DNORM:
+			yoff = 0;
+			break;
+		case DUNDER:
+			yoff = -1;
+			break;
+		case DABOVE:
+			yoff = 1;
+			break;
+		case DDEPTH:
+			return;
 	}
 	auto& block = planets[player.planet].getBlock(cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff);
 	switch (cursorAt) {
-	case 0://note:possble bugs related to block placing/removing off height limits
-		if (key == 'i')cursorSel -= 17;
-		if (key == 'k')cursorSel += 17;
-		if (key == 'j')cursorSel -= 1;
-		if (key == 'l')cursorSel += 1;
-		if (cursorSel < 0)cursorSel += 289;
-		if (cursorSel >= 289)cursorSel -= 289;
-		cursorX = cursorSel % 17;
-		cursorY = cursorSel / 17;
-		if (key == 'o') { 
-			cursorObj = block;
-			cursorObjx = cursorX - 8 + player.x;
-			cursorObjy = cursorY - 8 + player.y;
-			cursorObjz = player.z + yoff;
-			cursorObjplanet = player.planet;
-		}
-		if (key == 'b') {
-			if (block == nullptr)break;
-			if (player.item->slots[3].content != nullptr)break;
-			if (player.item->slots[3].size < block->size)break;
-			player.item->slots[3].content = block;
-			planets[player.planet].removeBlock(cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff);
-			player.updates.push_back({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff });
-			player.updates.push_back({ player.planet,player.x,player.y,player.z });
-		}
-		if (key == 'n') {
-			if (player.item->slots[3].content == nullptr)break;
-			if (block != nullptr)break;
-			block = player.item->slots[3].content;
-			player.item->slots[3].content = nullptr;
-			player.updates.push_back({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff });
-			player.updates.push_back({ player.planet,player.x,player.y,player.z });
-		}
-		if (key == 'm') {
-			if (player.item->slots[3].content == nullptr)break;
-			if (block == nullptr)break;
-			for (auto& i : block->slots) {
-				if (i.content != nullptr)continue;
-				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
-				//potential lack of sorter check?
-				i.content = player.item->slots[3].content;
-				player.item->slots[3].content = nullptr;
-				break;
+		case 0://note:possble bugs related to block placing/removing off height limits
+			if (key == 'i')cursorSel -= 17;
+			if (key == 'k')cursorSel += 17;
+			if (key == 'j')cursorSel -= 1;
+			if (key == 'l')cursorSel += 1;
+			if (cursorSel < 0)cursorSel += 289;
+			if (cursorSel >= 289)cursorSel -= 289;
+			cursorX = cursorSel % 17;
+			cursorY = cursorSel / 17;
+			if (key == 'o') {
+				cursorObj = block;
+				cursorObjx = cursorX - 8 + player.x;
+				cursorObjy = cursorY - 8 + player.y;
+				cursorObjz = player.z + yoff;
+				cursorObjplanet = player.planet;
 			}
-			player.updates.push_back({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff });
-			player.updates.push_back({ player.planet,player.x,player.y,player.z });
-		}
-		if (key == 'x') {
-			TerrainToolMods mods = getTerrainToolMods();
-			auto res = destroyTerrain({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff }, mods.hardness, mods.range);
-			for (auto& a : player.item->slots) {
-				if (a.content!=nullptr&&a.content->id == "soil" && a.content->dmg != 256) {
-					res[0]->dmg += a.content->dmg;
-					a.content = nullptr;
+			if (key == 'b') {
+				if (block == nullptr)break;
+				if (player.item->slots[3].content != nullptr)break;
+				if (player.item->slots[3].size < block->size)break;
+				player.item->slots[3].content = block;
+				planets[player.planet].removeBlock(cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff);
+				player.updates.push_back({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff });
+				player.updates.push_back({ player.planet,player.x,player.y,player.z });
+			}
+			if (key == 'n') {
+				if (player.item->slots[3].content == nullptr)break;
+				if (block != nullptr)break;
+				block = player.item->slots[3].content;
+				player.item->slots[3].content = nullptr;
+				player.updates.push_back({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff });
+				player.updates.push_back({ player.planet,player.x,player.y,player.z });
+			}
+			if (key == 'm') {
+				if (player.item->slots[3].content == nullptr)break;
+				if (block == nullptr)break;
+				for (auto& i : block->slots) {
+					if (i.content != nullptr)continue;
+					if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+					//potential lack of sorter check?
+					i.content = player.item->slots[3].content;
+					player.item->slots[3].content = nullptr;
+					break;
+				}
+				player.updates.push_back({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff });
+				player.updates.push_back({ player.planet,player.x,player.y,player.z });
+			}
+			if (key == 'x') {
+				TerrainToolMods mods = getTerrainToolMods();
+				auto res = destroyTerrain({ player.planet,cursorX - 8 + player.x, cursorY - 8 + player.y, player.z + yoff }, mods.hardness, mods.range);
+				for (auto& a : player.item->slots) {
+					if (a.content != nullptr && a.content->id == "soil" && a.content->dmg != 256) {
+						res[0]->dmg += a.content->dmg;
+						a.content = nullptr;
+					}
+				}
+				while (res[0]->dmg > 255) {
+					res[0]->dmg -= 256;
+					givePlayer(createItem({ "soil",(255 << 16) | '-',{},1,256 }));
+				}
+				for (auto a : res) {
+					givePlayer(a);
 				}
 			}
-			while (res[0]->dmg > 255) {
-				res[0]->dmg -= 256;
-				givePlayer(createItem({"soil",(255<<16)|'-',{},1,256}));
-			}
-			for (auto a : res) {
-				givePlayer(a);
-			}
-		}
-		break;
-	case 1:
-		if (key == 'i')cursorSel--;
-		if (key == 'k')cursorSel++;
-		if (cursorSel < 0)cursorSel = 0;
-		if (cursorSel >= player.item->slots.size())cursorSel = int(player.item->slots.size())-1;
-		cursorX = 17;
-		cursorY = 2 + cursorSel;
+			break;
+		case 1:
+			if (key == 'i')cursorSel--;
+			if (key == 'k')cursorSel++;
+			if (cursorSel < 0)cursorSel = 0;
+			if (cursorSel >= player.item->slots.size())cursorSel = int(player.item->slots.size()) - 1;
+			cursorX = 17;
+			cursorY = 2 + cursorSel;
 
-		if (key == 'o') {
-			cursorObj = player.item->slots[cursorSel].content;
-			cursorObjx = player.x;
-			cursorObjy = player.y;
-			cursorObjz = player.z;
-			cursorObjplanet = player.planet;
-		}
-		if (key == 'b') {
-			if (player.item->slots[cursorSel].content == nullptr)break;
-			if (player.item->slots[cursorSel].locked)break;
-			if (player.item->slots[3].content != nullptr)break;
-			if (player.item->slots[3].size < player.item->slots[cursorSel].content->size)break;
-			player.item->slots[3].content = player.item->slots[cursorSel].content;
-			player.item->slots[cursorSel].content = nullptr;
-			player.updates.push_back({ player.planet,player.x,player.y,player.z });
-		}
-		if (key == 'n') {
-			if (player.item->slots[3].content == nullptr)break;
-			auto& i = player.item->slots[cursorSel];
-			if (i.content != nullptr)break;
-			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
-			i.content = player.item->slots[3].content;
-			player.item->slots[3].content = nullptr;
-			player.updates.push_back({ player.planet,player.x,player.y,player.z });
-		}
-		if (key == 'm') {
-			if (player.item->slots[3].content == nullptr)break;
-			for (auto& i:player.item->slots) {
-				if (i.content != nullptr)continue;
-				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+			if (key == 'o') {
+				cursorObj = player.item->slots[cursorSel].content;
+				cursorObjx = player.x;
+				cursorObjy = player.y;
+				cursorObjz = player.z;
+				cursorObjplanet = player.planet;
+			}
+			if (key == 'b') {
+				if (player.item->slots[cursorSel].content == nullptr)break;
+				if (player.item->slots[cursorSel].locked)break;
+				if (player.item->slots[3].content != nullptr)break;
+				if (player.item->slots[3].size < player.item->slots[cursorSel].content->size)break;
+				player.item->slots[3].content = player.item->slots[cursorSel].content;
+				player.item->slots[cursorSel].content = nullptr;
+				player.updates.push_back({ player.planet,player.x,player.y,player.z });
+			}
+			if (key == 'n') {
+				if (player.item->slots[3].content == nullptr)break;
+				auto& i = player.item->slots[cursorSel];
+				if (i.content != nullptr)break;
+				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
 				i.content = player.item->slots[3].content;
 				player.item->slots[3].content = nullptr;
 				player.updates.push_back({ player.planet,player.x,player.y,player.z });
-				break;
 			}
-		}
-		break;
-	case 2:
-		if (key == 'i')cursorSel--;
-		if (key == 'k')cursorSel++;
-		if (cursorSel < 0)cursorSel = 0;
-		if (cursorSel >= cursorObj->slots.size())cursorSel = int(cursorObj->slots.size())-1;
-		cursorX = 0;
-		cursorY = 19 + cursorSel;
-		if (key == 'o') {
-			cursorObj = cursorObj->slots[cursorSel].content;
-			if (cursorObj == nullptr) {
-				cursorAt = 0;
-				cursorX = 0;
-				cursorY = 0;
-				cursorSel = 0;
-				break;
+			if (key == 'm') {
+				if (player.item->slots[3].content == nullptr)break;
+				for (auto& i : player.item->slots) {
+					if (i.content != nullptr)continue;
+					if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+					i.content = player.item->slots[3].content;
+					player.item->slots[3].content = nullptr;
+					player.updates.push_back({ player.planet,player.x,player.y,player.z });
+					break;
+				}
 			}
-			if (cursorObj->slots.size() <=cursorSel) {
-				cursorAt = 0;
-				cursorX = 0;
-				cursorY = 0;
-				cursorSel = 0;
+			break;
+		case 2:
+			if (key == 'i')cursorSel--;
+			if (key == 'k')cursorSel++;
+			if (cursorSel < 0)cursorSel = 0;
+			if (cursorSel >= cursorObj->slots.size())cursorSel = int(cursorObj->slots.size()) - 1;
+			cursorX = 0;
+			cursorY = 19 + cursorSel;
+			if (key == 'o') {
+				cursorObj = cursorObj->slots[cursorSel].content;
+				if (cursorObj == nullptr) {
+					cursorAt = 0;
+					cursorX = 0;
+					cursorY = 0;
+					cursorSel = 0;
+					break;
+				}
+				if (cursorObj->slots.size() <= cursorSel) {
+					cursorAt = 0;
+					cursorX = 0;
+					cursorY = 0;
+					cursorSel = 0;
+				}
 			}
-		}
-		if (key == 'b') {
-			if (cursorObj->slots[cursorSel].content == nullptr)break;
-			if (cursorObj->slots[cursorSel].locked)break;
-			if (player.item->slots[3].content != nullptr)break;
-			if (player.item->slots[3].size < cursorObj->slots[cursorSel].content->size)break;
-			player.item->slots[3].content=cursorObj->slots[cursorSel].content;
-			cursorObj->slots[cursorSel].content = nullptr;
-			player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
-			player.updates.push_back({ player.planet,player.x,player.y,player.z });
-		}
-		if (key == 'n') {
-			//if (isChildOf(block, cursorObj))break;
-			if (player.item->slots[3].content == nullptr)break;
-			auto& i = cursorObj->slots[cursorSel];
-			if (i.content != nullptr)break;
-			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
-			i.content = player.item->slots[3].content;
-			player.item->slots[3].content = nullptr;
-			player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
-			player.updates.push_back({ player.planet,player.x,player.y,player.z });
-		}
-		if (key == 'm') {
-			//if (isChildOf(block, cursorObj))break;
-			if (player.item->slots[3].content == nullptr)break;
-			for (auto& i : cursorObj->slots) {
-				if (i.content != nullptr)continue;
-				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+			if (key == 'b') {
+				if (cursorObj->slots[cursorSel].content == nullptr)break;
+				if (cursorObj->slots[cursorSel].locked)break;
+				if (player.item->slots[3].content != nullptr)break;
+				if (player.item->slots[3].size < cursorObj->slots[cursorSel].content->size)break;
+				player.item->slots[3].content = cursorObj->slots[cursorSel].content;
+				cursorObj->slots[cursorSel].content = nullptr;
+				player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
+				player.updates.push_back({ player.planet,player.x,player.y,player.z });
+			}
+			if (key == 'n') {
+				//if (isChildOf(block, cursorObj))break;
+				if (player.item->slots[3].content == nullptr)break;
+				auto& i = cursorObj->slots[cursorSel];
+				if (i.content != nullptr)break;
+				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
 				i.content = player.item->slots[3].content;
 				player.item->slots[3].content = nullptr;
 				player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
 				player.updates.push_back({ player.planet,player.x,player.y,player.z });
-				break;
 			}
-		}
-		break;
+			if (key == 'm') {
+				//if (isChildOf(block, cursorObj))break;
+				if (player.item->slots[3].content == nullptr)break;
+				for (auto& i : cursorObj->slots) {
+					if (i.content != nullptr)continue;
+					if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+					i.content = player.item->slots[3].content;
+					player.item->slots[3].content = nullptr;
+					player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
+					player.updates.push_back({ player.planet,player.x,player.y,player.z });
+					break;
+				}
+			}
+			break;
 	}
 }
 void processPlayer() {
@@ -778,24 +775,24 @@ void processPlayer() {
 		player.updates.push_back({ player.planet,player.x,player.y,player.z });
 	}
 }
-void processPacemaker(Update u, shared_ptr<Item> block,bool slotted);
-void processMisc(Update u, shared_ptr<Item> block,bool slotted);
-void processUpdate(Update u,shared_ptr<Item> block) {
+void processPacemaker(Update u, shared_ptr<Item> block, bool slotted);
+void processMisc(Update u, shared_ptr<Item> block, bool slotted);
+void processUpdate(Update u, shared_ptr<Item> block) {
 	if (block == nullptr)return;
 	for (auto& a : block->slots) {
 		processUpdate(u, a.content);
 	}
-	processMisc(u,block,true);
+	processMisc(u, block, true);
 }
 void processUpdate(Update u) {
-	if (updatesDone.contains(u.toString())&&(updatesDone[u.toString()]&u.flags)==u.flags)return;
-	updatesDone.insert({ u.toString(),u.flags});
+	if (updatesDone.contains(u.toString()) && (updatesDone[u.toString()] & u.flags) == u.flags)return;
+	updatesDone.insert({ u.toString(),u.flags });
 	auto& block = planets[u.planet].getBlock(u.x, u.y, u.z);
 	if (block == nullptr)return;
 	for (auto& a : block->slots) {
-		processUpdate(u,a.content);
+		processUpdate(u, a.content);
 	}
-	processMisc(u,block,false);
+	processMisc(u, block, false);
 }
 void processPrinter(Update u, shared_ptr<Item> block) {
 	if (u.funnyPower())return;
@@ -827,7 +824,7 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	string id = block->id;
 	if (id == "platform_pacemaker") {
-		processPacemaker(u, block,slotted);
+		processPacemaker(u, block, slotted);
 	}
 	else if (id == "platform_test_siren") {
 		block->cfg += 17;
@@ -836,7 +833,8 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	}
 	else if (id == "platform_printer_small") {
 		processPrinter(u, block);
-	}else if (id == "test_power_siren") {
+	}
+	else if (id == "test_power_siren") {
 		if (u.funnyPower())return;
 		block->cfg += u.lackPower(17);
 		block->cfg %= 256;
@@ -849,7 +847,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		if (block->dmg <= 0)throw "You died";
 	}
 }
-void processPacemaker(Update u, shared_ptr<Item> block,bool slotted) {
+void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 	player.updates.push_back(u);
 	vector<Update> queue;
 	queue.push_back(u);
@@ -904,21 +902,20 @@ struct Mod {
 	unordered_map<string, vector<pair<vector<string>, Item> > > recipes;
 	unordered_map<string, vector<int>> power;
 	template<class Archive>
-	void serialize(Archive& ar)
-	{
-		ar(cpair("description",description),cpair("recipes", recipes),cpair("power",power));
+	void serialize(Archive& ar) {
+		ar(make_nvp("description", description), make_nvp("recipes", recipes), make_nvp("power", power));
 	}
 };
 void loadMods() {
 	for (const auto& entry : filesystem::directory_iterator(".\\mods\\")) {
 		if (!entry.is_regular_file())continue;
-		if (entry.path().extension() != ".mod"&&!MOD_DEV)continue;
+		if (entry.path().extension() != ".mod" && !MOD_DEV)continue;
 		ifstream f;
 		f.open(entry.path());
 		if (!f.good())continue;
 		cereal::JSONInputArchive ain(f);
 		Mod m;
-		ain(cpair("mod",m));
+		ain(make_nvp("mod", m));
 		for (auto& r : m.recipes) {
 			for (auto& k : r.second) {
 				printerRecipes[r.first].push_back(k);
@@ -933,19 +930,19 @@ void test() {
 	Mod m;
 	m.description = "This is a test mod.It does not have any use.Do not load it.";
 	m.recipes["test"] = { {{"a"},{"testitem1",(255 << 16) | '#',{{1,createItem({"testitem2",(128 << 16) | '?',{},1}),false,"air",true}},2}},{{"b"},{"testitem2",(255 << 16) | '-',{{1,createNull(),false,"air",true}},2}} };
-	m.power["test"] = {1,2,3,4};
+	m.power["test"] = { 1,2,3,4 };
 	ofstream f;
 	f.open(".\\testmod.json");
 	cereal::JSONOutputArchive aout(f);
-	aout(cpair("mod",m));
+	aout(make_nvp("mod", m));
 }
 int main() {
 	init();
-	if(MOD_DEV)test();
+	if (MOD_DEV)test();
 	loadMods();
 	planets["Sylva"] = { "Sylva" };
 	cursorObj = nullptr;
-	if (1||!filesystem::is_directory(".\\save\\")|| !filesystem::is_directory(".\\save\\world\\")) {
+	if (1 || !filesystem::is_directory(".\\save\\") || !filesystem::is_directory(".\\save\\world\\")) {
 		filesystem::create_directory(".\\save\\");
 		filesystem::create_directory(".\\save\\world\\");
 		for (int i = 0; i < 256; i++) {
