@@ -785,7 +785,7 @@ void processUpdate(Update u, shared_ptr<Item> block) {
 void processUpdate(Update u) {
 	if (updatesDone.contains(u.toString()) && (updatesDone[u.toString()] & u.flags) == u.flags)return;
 	updatesDone.insert({ u.toString(),u.flags });
-	auto& block = planets[u.planet].getBlock(u.x, u.y, u.z);
+	auto& block = u.getBlock();
 	if (block == nullptr)return;
 	for (auto& a : block->slots) {
 		processUpdate(u, a.content);
@@ -846,13 +846,14 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	}
 }
 void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
+	if (u.flags & 1)return;
 	player.updates.push_back(u);
 	vector<Update> queue;
 	queue.push_back(u);
 	vector<Update> network;
-	network.push_back(u);
+	//network.push_back(u); //dont.
 	while (!queue.empty()) {
-		Update t = queue[queue.size() - 1];//putting a reference here will anger the gods and blame it on the planet Sylva,making it dissapear.
+		Update t = queue[queue.size() - 1];//putting a reference here will anger the gods and blame it on the planet Sylva,making it dissapear.(not tested after the memory overhaul)
 		queue.pop_back();
 		if (find(network.begin(), network.end(), t) != network.end())continue;
 		network.push_back(t);
@@ -878,7 +879,7 @@ void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 		if (totalExcess < 0 && a.emptiness == 1 || totalExcess>0 && a.emptiness == -1 || a.emptiness == 0)totalRate += a.rate;
 	}
 	if (totalExcess > totalRate)totalExcess = totalRate;
-	if (totalExcess < -totalRate)totalExcess = totalRate;
+	if (totalExcess < -totalRate)totalExcess = -totalRate;
 	if (totalRate != 0)for (auto& a : batteries) {
 		int temp = a.item->dmg;
 		a.item->dmg += totalExcess * a.rate / totalRate;
