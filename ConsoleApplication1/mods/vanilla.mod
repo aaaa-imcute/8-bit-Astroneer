@@ -71,6 +71,12 @@
                     0
                 ]
             }
+        ],
+        "resourceColors":[
+            {
+                "key":"resin",
+                "value":220
+            }
         ]
     }
 }
