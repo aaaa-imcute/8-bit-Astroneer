@@ -130,7 +130,6 @@ struct TerrainToolMods {
 	string special="";
 };
 unordered_map<string, vector<int>> powerMap;
-unordered_map<string, unsigned char> resourceColors;
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -155,7 +154,10 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 }
 //no junk
 shared_ptr<Item> createResource(string type) {
-	uint a = resourceColors[type] << 16 | '*';
+	unordered_map<string, unsigned char> colors = {
+		{"resin",220}
+	};
+	uint a = colors[type] << 16 | '*';
 	return make_shared<Item>(Item{ "resource_" + type,a,{},1,255 });
 }
 shared_ptr<Item> createNull() {
@@ -901,11 +903,10 @@ struct Mod {
 	string description;
 	unordered_map<string, vector<pair<vector<string>, Item> > > recipes;
 	unordered_map<string, vector<int>> power;
-	unordered_map<string, unsigned char> resourceColors;
 	template<class Archive>
 	void serialize(Archive& ar)
 	{
-		ar(cpair("description",description),cpair("recipes", recipes),cpair("power",power),cpair("resourceColors",resourceColors));
+		ar(cpair("description",description),cpair("recipes", recipes),cpair("power",power));
 	}
 };
 void loadMods() {
@@ -926,17 +927,13 @@ void loadMods() {
 		for (auto& r : m.power) {
 			powerMap[r.first] = r.second;
 		}
-		for (auto& r : m.resourceColors) {
-			resourceColors[r.first] = r.second;
-		}
 	}
 }
-void generateTemplateDatapack() {
+void test() {
 	Mod m;
 	m.description = "This is a test mod.It does not have any use.Do not load it.";
 	m.recipes["test"] = { {{"a"},{"testitem1",(255 << 16) | '#',{{1,createItem({"testitem2",(128 << 16) | '?',{},1}),false,"air",true}},2}},{{"b"},{"testitem2",(255 << 16) | '-',{{1,createNull(),false,"air",true}},2}} };
 	m.power["test"] = {1,2,3,4};
-	m.resourceColors["a"] = 128;
 	ofstream f;
 	f.open(".\\testmod.json");
 	cereal::JSONOutputArchive aout(f);
@@ -944,7 +941,7 @@ void generateTemplateDatapack() {
 }
 int main() {
 	init();
-	if (MOD_DEV)generateTemplateDatapack();
+	if(MOD_DEV)test();
 	loadMods();
 	planets["Sylva"] = { "Sylva" };
 	cursorObj = nullptr;
@@ -961,8 +958,8 @@ int main() {
 			{4,nullptr,false,"air",true},
 			{1,nullptr,false,"air",false,'c'},
 			{1,nullptr,false,"air",false,'v'},
-			{1,make_shared<Item>(Item{ "platform_printer_small",(255 << 16) | '@',{{1,createResource("resin")},{1,nullptr},{2,nullptr}},1 ,0,0})},
-			{1,nullptr},
+			{1,make_shared<Item>(Item{ "platform_printer_small",(255 << 16) | '@',{{1,nullptr},{1,nullptr},{2,nullptr}},1 ,0,0})},
+			{1,createResource("resin")},
 			{1,nullptr},
 			{1,nullptr},
 			{1,nullptr},
