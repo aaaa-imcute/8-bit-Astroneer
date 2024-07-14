@@ -946,7 +946,7 @@ int main() {
 	loadMods();
 	planets["Sylva"] = { "Sylva" };
 	cursorObj = nullptr;
-	if (1 || !filesystem::is_directory(".\\save\\") || !filesystem::is_directory(".\\save\\world\\")) {
+	if (!filesystem::is_directory(".\\save\\") || !filesystem::is_directory(".\\save\\world\\")) {
 		filesystem::create_directory(".\\save\\");
 		filesystem::create_directory(".\\save\\world\\");
 		for (int i = 0; i < 256; i++) {

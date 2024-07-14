@@ -3,6 +3,247 @@
         "description": "Vanilla datapack",
         "recipes": [
             {
+                "key":"player_printer",
+                "value":[
+                    {
+                        "first":[
+                            "resin"
+                        ],
+                        "second":{
+                            "id":"platform_printer_small",
+                            "display":16711744,
+                            "slots":[
+                                {
+                                    "size":1,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size":1,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size":2,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "first":[
+                            "exo_alloy"
+                        ],
+                        "second":{
+                            "id":"portable_oxygenator",
+                            "display":10027072,
+                            "slots":[],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "resin"
+                        ],
+                        "second":{
+                            "id":"generator_small",
+                            "display":15007781,
+                            "slots":[
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "resource_organic",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "coal"
+                        ],
+                        "second":{
+                            "id":"power_cell",
+                            "display":15007779,
+                            "slots":[],
+                            "size":1,
+                            "dmg":480,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "zinc"
+                        ],
+                        "second":{
+                            "id":"battery_small",
+                            "display":15007779,
+                            "slots":[],
+                            "size":1,
+                            "dmg":320,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "zinc"
+                        ],
+                        "second":{
+                            "id":"mod_range_wide",
+                            "display":14024741,
+                            "slots":[],
+                            "size":1,
+                            "dmg":1,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "zinc"
+                        ],
+                        "second":{
+                            "id":"mod_range_narrow",
+                            "display":14024741,
+                            "slots":[],
+                            "size":1,
+                            "dmg":-1,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "zinc"
+                        ],
+                        "second":{
+                            "id":"mod_inhibit",
+                            "display":14024741,
+                            "slots":[],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "ceramic"
+                        ],
+                        "second":{
+                            "id":"mod_drill_1",
+                            "display":14024741,
+                            "slots":[],
+                            "size":1,
+                            "dmg":1,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "tungsten_carbide"
+                        ],
+                        "second":{
+                            "id":"mod_drill_2",
+                            "display":14024741,
+                            "slots":[],
+                            "size":1,
+                            "dmg":2,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "diamond"
+                        ],
+                        "second":{
+                            "id":"mod_drill_3",
+                            "display":14024741,
+                            "slots":[],
+                            "size":1,
+                            "dmg":3,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "explosive_powder"
+                        ],
+                        "second":{
+                            "id":"mod_dynamite",
+                            "display":14024741,
+                            "slots":[],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "titanium_alloy"
+                        ],
+                        "second":{
+                            "id":"jetpack_hydrazine",
+                            "display":14024741,
+                            "slots":[
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "resource_hydrazine",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    }
+                ]
+            },
+            {
                 "key": "platform_printer_small",
                 "value": [
                     {
@@ -26,7 +267,7 @@
                                     "qTrig": 0
                                 }
                             ],
-                            "size": 2,
+                            "size": 1,
                             "dmg": 0,
                             "cfg": 0
                         }
@@ -69,6 +310,24 @@
                     10,
                     0,
                     0
+                ]
+            },
+            {
+                "key": "portable_oxygenator",
+                "value": [
+                    0,
+                    10,
+                    0,
+                    0
+                ]
+            },
+            {
+                "key": "power_cell",
+                "value": [
+                    0,
+                    0,
+                    480,
+                    10
                 ]
             }
         ],

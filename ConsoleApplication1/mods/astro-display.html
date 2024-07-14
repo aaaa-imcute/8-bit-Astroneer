@@ -1,0 +1,9 @@
+<input id="a" type=number onchange="submit()"><br>
+<input id="b" type=text maxlength=1 onchange="submit()"><br>
+<pre id="c"></pre>
+<script>
+function  submit(){
+	let d=document.getElementById.bind(document);
+	d("c").innerText=(Number(d("a").value)<<16)|(d("b").value.charCodeAt(0));
+}
+</script>
