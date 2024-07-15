@@ -116,10 +116,9 @@
                             "display":15007779,
                             "slots":[],
                             "size":1,
-                            "dmg":320,
+                            "dmg":0,
                             "cfg":0
-                        },
-                        "codeNeeded":true
+                        }
                     },
                     {
                         "first":[
@@ -240,12 +239,211 @@
                             "cfg":0
                         },
                         "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "quartz"
+                        ],
+                        "second":{
+                            "id":"_processor_basic",
+                            "display":201,
+                            "slots":[],
+                            "size":0,
+                            "dmg":0,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "exo_alloy",
+                            "astronium"
+                        ],
+                        "second":{
+                            "id":"_processor_advanced",
+                            "display":129,
+                            "slots":[],
+                            "size":0,
+                            "dmg":0,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "exo_alloy",
+                            "processor_advanced"
+                        ],
+                        "second":{
+                            "id":"rtg_small",
+                            "display":15007781,
+                            "slots":[],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        }
                     }
                 ]
             },
             {
                 "key": "platform_printer_small",
                 "value": [
+                    {
+                        "first": [
+                            "processor_basic",
+                            "resin"
+                        ],
+                        "second": {
+                            "id": "printer_medium",
+                            "display": 16711744,
+                            "slots": [
+                                {
+                                    "size":1,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size":1,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size":1,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size":3,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "graphite",
+                            "iron"
+                        ],
+                        "second": {
+                            "id": "platform_auto_arm",
+                            "display": 16711717,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "tungsten",
+                            "iron"
+                        ],
+                        "second":{
+                            "id":"generator_medium",
+                            "display":15007781,
+                            "slots":[
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "resource_graphite",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size":2,
+                            "dmg":0,
+                            "cfg":0
+                        },
+                        "codeNeeded":true
+                    },
+                    {
+                        "first":[
+                            "zinc"
+                        ],
+                        "second":{
+                            "id":"battery_medium",
+                            "display":15007779,
+                            "slots":[],
+                            "size":2,
+                            "dmg":0,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "exo_alloy",
+                            "lithium"
+                        ],
+                        "second":{
+                            "id":"rtg_medium",
+                            "display":15007781,
+                            "slots":[],
+                            "size":2,
+                            "dmg":0,
+                            "cfg":0
+                        }
+                    },
                     {
                         "first": [
                             "resin"
@@ -267,7 +465,511 @@
                                     "qTrig": 0
                                 }
                             ],
-                            "size": 1,
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "resin",
+                            "resin"
+                        ],
+                        "second": {
+                            "id": "platform_medium_b",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 2,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "resin",
+                            "resin"
+                        ],
+                        "second": {
+                            "id": "platform_medium_c",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 2,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 2,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "resin",
+                            "resin"
+                        ],
+                        "second": {
+                            "id": "storage_medium_a",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "titanium",
+                            "titanium"
+                        ],
+                        "second": {
+                            "id": "storage_medium_b",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
                             "dmg": 0,
                             "cfg": 0
                         }
@@ -295,6 +997,15 @@
                 ]
             },
             {
+                "key": "battery_medium",
+                "value": [
+                    0,
+                    0,
+                    5120,
+                    100
+                ]
+            },
+            {
                 "key": "player_battery",
                 "value": [
                     0,
@@ -308,6 +1019,15 @@
                 "value": [
                     0,
                     10,
+                    0,
+                    0
+                ]
+            },
+            {
+                "key": "printer_medium",
+                "value": [
+                    0,
+                    20,
                     0,
                     0
                 ]
@@ -328,6 +1048,24 @@
                     0,
                     480,
                     10
+                ]
+            },
+            {
+                "key": "rtg_small",
+                "value": [
+                    10,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "key": "rtg_medium",
+                "value": [
+                    40,
+                    0,
+                    0,
+                    0
                 ]
             }
         ],
@@ -383,6 +1121,11 @@
                 "key":"aluminium",
                 "value":255,
                 "comment":"replaces iron as a printing ingredient"
+            },
+            {
+                "key":"lithium",
+                "value":162,
+                "comment":"color from emission spectra"
             },
             {
                 "key":"titanium",

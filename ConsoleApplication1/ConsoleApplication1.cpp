@@ -793,8 +793,6 @@ void processUpdate(Update u) {
 	processMisc(u, block, false);
 }
 void processPrinter(Update u, shared_ptr<Item> block) {
-	if (u.funnyPower())return;
-	block->dmg += u.lackPower(32);
 	if (block->dmg >= 255) {
 		if (block->slots[block->slots.size() - 1].content != nullptr)return;
 		vector<string> key;
@@ -811,6 +809,15 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 					continue;
 				}
 				block->slots[block->slots.size() - 1].content = createItem(i.second);
+				auto& a = block->slots[block->slots.size() - 1].content;
+				if (a->id.starts_with("_")) {
+					a->display = a->display << 16 | '*';
+					a->size = 1;
+					a->dmg = 255;
+					a->cfg = 0;
+					a->slots.clear();
+					a->id = "resource" + a->id;
+				}
 				block->dmg = 0;
 				for (int i = 0; i < block->slots.size() - 1; i++) {
 					block->slots[i].content = nullptr;
@@ -829,7 +836,8 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->cfg %= 256;
 		block->display = block->cfg << 16 | '@';
 	}
-	else if (id == "platform_printer_small") {
+	else if (!u.funnyPower()&&printerRecipes.find(id)!=printerRecipes.end()) {
+		block->dmg += u.lackPower(64/pow(2,block->size));
 		processPrinter(u, block);
 	}
 	else if (id == "test_power_siren") {
