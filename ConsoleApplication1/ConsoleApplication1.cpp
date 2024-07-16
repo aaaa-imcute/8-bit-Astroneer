@@ -69,6 +69,7 @@ struct Item {
 	int cfg = 0;
 	//int facing = 0;
 	PowerStatus getPower(shared_ptr<Item> that);
+	bool isWorking();
 	/*vector<int> getFacing() {
 		switch (facing) {
 		case 0:
@@ -138,8 +139,8 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 		s.used = cfg;
 	}
 	if (powerMap.find(id) != powerMap.end()) {
-		s.produced = powerMap[id][0];
-		s.used = powerMap[id][1];
+		s.produced = powerMap[id][0]*isWorking();
+		s.used = powerMap[id][1]*isWorking();
 		if (powerMap[id][2])s.stored.push_back({ powerMap[id][2],powerMap[id][3],that,(dmg >= powerMap[id][2] ? 1 : (dmg <= 0 ? -1 : 0)) });
 	}
 	for (Slot& a : slots) {
@@ -151,6 +152,9 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	}
 	return s;
 }
+bool Item::isWorking() {
+	return printerRecipes.find(id) == printerRecipes.end() || dmg < 256;
+};
 //no junk
 shared_ptr<Item> createResource(string type) {
 	uint a = resourceColors[type] << 16 | '*';
@@ -523,7 +527,7 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 	return mods;
 }
 void processCursor() {
-	if (cursorObj != nullptr && cursorObj->id.starts_with("printer")) {
+	if (cursorObj != nullptr && printerRecipes.find(cursorObj->id)!=printerRecipes.end()) {
 		if (key == 'y')cursorObj->cfg++;
 		if (key == 'h')cursorObj->cfg--;
 	}
@@ -714,6 +718,39 @@ void processCursor() {
 			player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
 			player.updates.push_back({ player.planet,player.x,player.y,player.z });
 		}
+		if (key == 'B') {
+			if (cursorObj->slots[cursorSel].content == nullptr)break;
+			if (cursorObj->slots[cursorSel].content->id != "soil")break;
+			if (cursorObj->slots[cursorSel].locked)break;
+			if (player.item->slots[3].content != nullptr&& player.item->slots[3].content->id!="soil")break;
+			if (player.item->slots[3].size < cursorObj->slots[cursorSel].content->size)break;
+			if (player.item->slots[3].content == nullptr)player.item->slots[3].content = createItem({ "soil",(255 << 16) | '-',{},1});
+			player.item->slots[3].content->dmg += cursorObj->slots[cursorSel].content->dmg/2;
+			cursorObj->slots[cursorSel].content ->dmg /= 2;
+			if (player.item->slots[3].content->dmg > 255) {
+				cursorObj->slots[cursorSel].content->dmg += player.item->slots[3].content->dmg - 256;
+				player.item->slots[3].content->dmg = 256;
+			}
+			player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
+			player.updates.push_back({ player.planet,player.x,player.y,player.z });
+		}
+		if (key == 'N') {
+			//if (isChildOf(block, cursorObj))break;
+			if (player.item->slots[3].content == nullptr)break;
+			if (player.item->slots[3].content->id != "soil")break;
+			auto& i = cursorObj->slots[cursorSel];
+			if (i.content != nullptr && player.item->slots[3].content->id != "soil")break;
+			if (i.content == nullptr)i.content = createItem({ "soil",(255 << 16) | '-',{},1 });
+			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
+			i.content->dmg += player.item->slots[3].content->dmg / 2;
+			player.item->slots[3].content->dmg /= 2;
+			if (i.content->dmg > 255) {
+				player.item->slots[3].content->dmg += i.content->dmg - 256;
+				i.content->dmg = 256;
+			}
+			player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
+			player.updates.push_back({ player.planet,player.x,player.y,player.z });
+		}
 		if (key == 'm') {
 			//if (isChildOf(block, cursorObj))break;
 			if (player.item->slots[3].content == nullptr)break;
@@ -798,6 +835,9 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 		vector<string> key;
 		for (int i = 0; i < block->slots.size() - 1; i++) {
 			if (block->slots[i].content == nullptr)continue;
+			if (block->slots[i].content->id == "soil") {
+				key.push_back("soil_" + block->slots[i].content->dmg);
+			}
 			if (!block->slots[i].content->id.starts_with("resource_"))continue;
 			key.push_back(block->slots[i].content->id.substr(string("resource_").size()));
 		}
@@ -820,6 +860,7 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 				}
 				block->dmg = 0;
 				for (int i = 0; i < block->slots.size() - 1; i++) {
+					if (block->slots[i].content->id != "soil"&&!block->slots[i].content->id.starts_with("resource_"))continue;
 					block->slots[i].content = nullptr;
 				}
 			}
