@@ -1264,7 +1264,8 @@
                             "size": 3,
                             "dmg": 0,
                             "cfg": 0
-                        }
+                        },
+                        "codeNeeded":true
                     },
                     {
                         "first": [
@@ -1546,6 +1547,429 @@
                         }
                     }
                 ]
+            },
+            {
+                "key":"printer_large",
+                "value":[
+                    {
+                        "first": [
+                            "resin",
+                            "resin",
+                            "aluminum"
+                        ],
+                        "second": {
+                            "id": "platform_xl_a",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 4,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 4,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "resin",
+                            "resin",
+                            "resin",
+                            "aluminum"
+                        ],
+                        "second": {
+                            "id": "platform_xl_b",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 3,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 3,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 4,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 4,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "key":"pyrolysis_lab",
+                "value":[
+                    {
+                        "first": [
+                            "plant_matter"
+                        ],
+                        "second": {
+                            "id": "_graphite",
+                            "display": 241,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "graphite"
+                        ],
+                        "second": {
+                            "id": "_coal",
+                            "display": 232,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "quartz"
+                        ],
+                        "second": {
+                            "id": "_glass",
+                            "display": 232,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "key":"soil_centrifuge",
+                "value":[
+                    {
+                        "first": [
+                            "soil_64"
+                        ],
+                        "second": {
+                            "id": "_resin",
+                            "display": 220,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "soil_64"
+                        ],
+                        "second": {
+                            "id": "_plant_matter",
+                            "display": 40,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "soil_64"
+                        ],
+                        "second": {
+                            "id": "_ceramic",
+                            "display": 130,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "soil_128"
+                        ],
+                        "second": {
+                            "id": "_quartz",
+                            "display": 231,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "soil_256"
+                        ],
+                        "second": {
+                            "id": "_ammonium",
+                            "display": 166,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "key":"compost",
+                "value":[
+                    {
+                        "first": [
+                            "plant_matter"
+                        ],
+                        "second": {
+                            "id": "soil",
+                            "display": 16711725,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 128,
+                            "cfg": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "key":"chemistry_lab",
+                "value":[
+                    {
+                        "first": [
+                            "hydrogen",
+                            "hydrogen"
+                        ],
+                        "second": {
+                            "id": "_hydrogen_peroxide",
+                            "display": 153,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "quartz",
+                            "quartz",
+                            "methane"
+                        ],
+                        "second": {
+                            "id": "_silicone",
+                            "display": 80,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "resin",
+                            "resin",
+                            "oleum"
+                        ],
+                        "second": {
+                            "id": "_rubber",
+                            "display": 236,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "propane",
+                            "propane",
+                            "hydrogen_peroxide"
+                        ],
+                        "second": {
+                            "id": "_plastic",
+                            "display": 180,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "hydrazine",
+                            "hydrazine",
+                            "hydrogen_peroxide"
+                        ],
+                        "second": {
+                            "id": "_explosive_powder",
+                            "display": 209,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "tungsten",
+                            "graphite"
+                        ],
+                        "second": {
+                            "id": "_tungsten_carbide",
+                            "display": 172,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "iron",
+                            "graphite"
+                        ],
+                        "second": {
+                            "id": "_steel",
+                            "display": 252,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "ammonium",
+                            "ammonium"
+                        ],
+                        "second": {
+                            "id": "_hydrazine",
+                            "display": 208,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "graphite",
+                            "graphite",
+                            "hydrogen_peroxide"
+                        ],
+                        "second": {
+                            "id": "_graphene",
+                            "display": 247,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "graphene",
+                            "graphene"
+                        ],
+                        "second": {
+                            "id": "_diamond",
+                            "display": 153,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "titanium",
+                            "iron"
+                        ],
+                        "second": {
+                            "id": "_titanium_alloy",
+                            "display": 91,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "astronium",
+                            "diamond",
+                            "helium"
+                        ],
+                        "second": {
+                            "id": "_exo_alloy",
+                            "display": 177,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "spodumene"
+                        ],
+                        "second": {
+                            "id": "_aluminium",
+                            "display": 255,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "spodumene"
+                        ],
+                        "second": {
+                            "id": "_lithium",
+                            "display": 162,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    }
+                ]
             }
         ],
         "power": [
@@ -1615,11 +2039,12 @@
             {
                 "key": "pyrolysis_lab",
                 "value": [
-                    15,
                     0,
+                    120,
                     0,
                     0
-                ]
+                ],
+                "comment":"compost->soil centrifuge->pyrolysis lab->medium generator cycle produces 1.152 kj,so soil centrifuge+pyrolysis lab<=37.5w for it to produce net energy.i want it to be a small but existing energy."
             },
             {
                 "key": "soil_centrifuge",
@@ -1629,16 +2054,6 @@
                     0,
                     0
                 ]
-            },
-            {
-                "key": "compost",
-                "value": [
-                    0,
-                    120,
-                    0,
-                    0
-                ],
-                "comment":"compost->soil centrifuge->medium generator cycle produces 1.2 kj,so soil centrifuge+compost<=37.5w for it to produce net energy.i want it to be a small but existing energy."
             },
             {
                 "key": "chemistry_lab",
@@ -1721,6 +2136,10 @@
             {
                 "key":"quartz",
                 "value":231
+            },
+            {
+                "key":"glass",
+                "value":229
             },
             {
                 "key":"processor_basic",
