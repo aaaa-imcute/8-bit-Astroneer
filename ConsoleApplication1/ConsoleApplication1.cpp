@@ -130,6 +130,7 @@ struct TerrainToolMods {
 };
 unordered_map<string, vector<int>> powerMap;
 unordered_map<string, unsigned char> resourceColors;
+unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes;
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -138,7 +139,10 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	else if (id == "test_power_void") {
 		s.used = cfg;
 	}
-	if (powerMap.find(id) != powerMap.end()) {
+	else if (id == "player_battery") {
+		
+	}
+	else if (powerMap.find(id) != powerMap.end()) {
 		s.produced = powerMap[id][0]*isWorking();
 		s.used = powerMap[id][1]*isWorking();
 		if (powerMap[id][2])s.stored.push_back({ powerMap[id][2],powerMap[id][3],that,(dmg >= powerMap[id][2] ? 1 : (dmg <= 0 ? -1 : 0)) });
@@ -182,7 +186,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 		for (int j = 0; j < 16; j++) {
 			heightmap[i][j].resize(16);
 			for (int k = 0; k < 16; k++) {
-				heightmap[i][j][k] = 4 * perlin.noise3D((x * 16 + j) * 0.1, (y * 16 + k) * 0.1, i) + 10 * i;
+				heightmap[i][j][k] = int(4 * perlin.noise3D((x * 16 + j) * 0.1, (y * 16 + k) * 0.1, i) + 10 * i);
 			}
 		}
 	}
@@ -301,7 +305,6 @@ struct Update {
 };
 vector<Update> _updates;
 unordered_map<string, int> updatesDone;
-unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes;
 int cursorAt = 0;
 int cursorSel = 0;
 int cursorX = 0, cursorY = 0;
@@ -860,13 +863,14 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 				}
 				block->dmg = 0;
 				for (int i = 0; i < block->slots.size() - 1; i++) {
-					if (block->slots[i].content->id != "soil"&&!block->slots[i].content->id.starts_with("resource_"))continue;
+					if (block->slots[i].content!=nullptr&&block->slots[i].content->id != "soil"&&!block->slots[i].content->id.starts_with("resource_"))continue;
 					block->slots[i].content = nullptr;
 				}
 			}
 		}
 	}
 }
+int thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[9] = { 1,2,4,8,16,32,64,128,256 };
 void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	string id = block->id;
 	if (id == "platform_pacemaker") {
@@ -878,7 +882,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->display = block->cfg << 16 | '@';
 	}
 	else if (!u.funnyPower()&&printerRecipes.find(id)!=printerRecipes.end()) {
-		block->dmg += u.lackPower(64/pow(2,block->size));
+		block->dmg += u.lackPower(64/ thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[block->size]);
 		processPrinter(u, block);
 	}
 	else if (id == "test_power_siren") {
@@ -930,6 +934,7 @@ void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 	if (totalExcess > totalRate)totalExcess = totalRate;
 	if (totalExcess < -totalRate)totalExcess = -totalRate;
 	if (totalRate != 0)for (auto& a : batteries) {
+		//if (totalExcess >= 0 && a.emptiness == 1 || totalExcess <= 0 && a.emptiness == -1)continue;//oops this was not a problem it appeared to be because i ignored the PO in the printer in the backpack
 		int temp = a.item->dmg;
 		a.item->dmg += totalExcess * a.rate / totalRate;
 		if (a.item->dmg < 0)a.item->dmg = 0;
@@ -1017,6 +1022,7 @@ int main() {
 			{1,nullptr},
 			{1,nullptr},
 			{1,make_shared<Item>(Item{ "platform_pacemaker",(255 << 16) | '@',{},1 }),true},
+			{1,make_shared<Item>(Item{ "player_printer",(255 << 16) | '@',{{1,nullptr},{1,nullptr}},1 }),true},
 		},256 }, 0, 0, 0);
 		player.x = player.y = player.z = 0;
 		player.planet = "Sylva";
@@ -1046,8 +1052,8 @@ int main() {
 			}
 		}
 		processCursor();
-		processPlayer();
-		if (string(" ").contains(key)) {
+		if (string(" qewasd").contains(key)) {
+			processPlayer();
 			for (auto& i : player.updates)_updates.push_back(i);
 			player.updates.clear();
 			updatesDone.clear();
