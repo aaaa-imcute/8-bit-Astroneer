@@ -118,9 +118,20 @@ struct PowerStatus {
 	vector<BatteryStatus> stored = {};
 };
 struct OreParams {
-	string id;
+	vector<string> ores;
 	double thresh;
-	short color;
+	template<class Archive>
+	void serialize(Archive& ar) {
+		ar(make_nvp("ores", ores), make_nvp("thresh", thresh));
+	}
+};
+struct PlanetMod {
+	int difficulty;
+	vector<OreParams> ores;
+	template<class Archive>
+	void serialize(Archive& ar) {
+		ar(make_nvp("difficulty", difficulty), make_nvp("ores", ores));
+	}
 };
 struct TerrainToolMods {
 	int hardness = 0;
@@ -131,6 +142,7 @@ struct TerrainToolMods {
 unordered_map<string, vector<int>> powerMap;
 unordered_map<string, unsigned char> resourceColors;
 unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes;
+unordered_map<string, PlanetMod> planetSettings;
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -179,7 +191,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 			a[i][j].resize(16);
 		}
 	}
-	int planetDiff = 0;//TODO:according to planets
+	int planetDiff = planetSettings[planet].difficulty;
 	vector<vector<vector<int>>> heightmap(12);
 	for (int i = 0; i < 12; i++) {
 		heightmap[i].resize(16);
@@ -190,20 +202,21 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 			}
 		}
 	}
-	vector <OreParams > ores = { {"resin",0.6,220} };//in decreasing priority
+	vector <OreParams > ores = planetSettings[planet].ores;//in decreasing priority
 	for (int i = 0; i < 6; i += 2) {
 		for (int j = 0; j < 16; j++) {
 			for (int k = 0; k < 16; k++) {
 				for (int l = heightmap[i][j][k]; l < heightmap[i + 1][j][k]; l++) {
 					if (l < 0 || l>255)continue;
-					OreParams p = { "soil",-1,255 };
+					int hardness = 3 - i / 2 + planetDiff;
 					for (int o = 0; o < ores.size(); o++) {
-						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 16 + l) * 0.2) > ores[o].thresh) {//dont add more than 16 planets.
-							p = ores[o];
+						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 256 + l) * 0.2) > ores[o].thresh) {//dont add more than 256 planets.
+							string id = ores[o].ores[hardness - planetDiff-1];
+							a[l][k][j] = createItem({id + "_placed",uint(resourceColors[id]) << 16 | '-',{},256,hardness});
 							break;
 						}
 					}
-					a[l][k][j] = createItem({ p.id + "_placed",uint(p.color) << 16 | '-',{},256,3 - i / 2 + planetDiff });
+					if(a[l][k][j]==nullptr)a[l][k][j] = createItem({"soil_placed",255 << 16 | '-',{},256,hardness });
 				}
 			}
 		}
@@ -955,9 +968,10 @@ struct Mod {
 	unordered_map<string, vector<pair<vector<string>, Item> > > recipes;
 	unordered_map<string, vector<int>> power;
 	unordered_map<string, unsigned char> resourceColors;
+	unordered_map<string, PlanetMod> planets;
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("description", description), make_nvp("recipes", recipes), make_nvp("power", power),make_nvp("resourceColors",resourceColors));
+		ar(make_nvp("description", description), make_nvp("recipes", recipes), make_nvp("power", power), make_nvp("resourceColors", resourceColors), make_nvp("planets", planets));
 	}
 };
 void loadMods() {
@@ -981,6 +995,9 @@ void loadMods() {
 		for (auto& r : m.resourceColors) {
 			resourceColors[r.first] = r.second;
 		}
+		for (auto& r : m.planets) {
+			planetSettings[r.first] = r.second;
+		}
 	}
 }
 void generateTemplateDatapack() {
@@ -989,14 +1006,14 @@ void generateTemplateDatapack() {
 	m.recipes["test"] = { {{"a"},{"testitem1",(255 << 16) | '#',{{1,createItem({"testitem2",(128 << 16) | '?',{},1}),false,"air",true}},2}},{{"b"},{"testitem2",(255 << 16) | '-',{{1,createNull(),false,"air",true}},2}} };
 	m.power["test"] = { 1,2,3,4 };
 	m.resourceColors["a"] = 128;
-	ofstream f;
-	f.open(".\\testmod.json");
-	cereal::JSONOutputArchive aout(f);
-	aout(make_nvp("mod", m));
+	//ofstream f;
+	//f.open(".\\testmod.json");
+	//cereal::JSONOutputArchive aout(f);
+	//aout(make_nvp("mod", m));
 }
 int main() {
 	init();
-	if (MOD_DEV)generateTemplateDatapack();
+	//if (MOD_DEV)generateTemplateDatapack();
 	loadMods();
 	planets["Sylva"] = { "Sylva" };
 	cursorObj = nullptr;

@@ -2316,6 +2316,40 @@
                 "key":"scrap",
                 "value":243
             }
+        ],
+        "planets":[
+            {
+                "key":"Sylva",
+                "value":{
+                    "difficulty":0,
+                    "ores":[
+                        {
+                            "ores":["resin","iron","astronium"],
+                            "thresh":0.6
+                        },
+                        {
+                            "ores":["plant_matter","iron","coal"],
+                            "thresh":0.6
+                        },
+                        {
+                            "ores":["ammonium","iron","quartz"],
+                            "thresh":0.6
+                        },
+                        {
+                            "ores":["clay","iron","astronium"],
+                            "thresh":0.7
+                        },
+                        {
+                            "ores":["coal","iron","coal"],
+                            "thresh":0.7
+                        },
+                        {
+                            "ores":["quartz","iron","quartz"],
+                            "thresh":0.7
+                        }
+                    ]
+                }
+            }
         ]
     }
 }
