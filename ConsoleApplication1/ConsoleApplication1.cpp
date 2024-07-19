@@ -433,8 +433,14 @@ void displayItem(shared_ptr<Item>& item, int x, int y) {
 		buf[y][x + 2] = (255 << 16) | 'l';
 		return;
 	}
-	clearRect(x, y, max(int(item->id.size()), 12), int(item->slots.size()) + 2);
-	for (int i = 0; i < item->id.size(); i++)buf[y][x + i] = (255 << 16) | (item->id[i]);
+	if (item == player.item) {
+		clearRect(x, y, max(int(item->id.size()), 12), int(item->slots.size()) + 1);
+		y--;
+	}
+	else {
+		clearRect(x, y, max(int(item->id.size()), 12), int(item->slots.size()) + 2);
+		for (int i = 0; i < item->id.size(); i++)buf[y][x + i] = (255 << 16) | (item->id[i]);
+	}
 	displayNumber(item->size, x, y + 1);
 	displayNumber(item->dmg, x + 4, y + 1);
 	displayNumber(item->cfg, x + 8, y + 1);
@@ -651,7 +657,7 @@ void processCursor() {
 		if (cursorSel < 0)cursorSel = 0;
 		if (cursorSel >= player.item->slots.size())cursorSel = int(player.item->slots.size()) - 1;
 		cursorX = 17;
-		cursorY = 2 + cursorSel;
+		cursorY = 1 + cursorSel;
 
 		if (key == 'o') {
 			cursorObj = player.item->slots[cursorSel].content;
