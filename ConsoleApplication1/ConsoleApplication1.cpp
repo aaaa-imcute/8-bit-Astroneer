@@ -28,7 +28,7 @@ using uint = unsigned int;
 using cereal::make_nvp;
 constexpr auto W = 100;
 constexpr auto H = 50;
-constexpr auto MOD_DEV = 0;
+constexpr auto MOD_DEV = 1;
 using namespace std;
 vector<vector<uint> > buf(H, vector<uint>(W, (32 << 16) | ' '));
 char key = 0;
@@ -60,6 +60,7 @@ const siv::PerlinNoise::seed_type noiseSeed = 123456u;
 const siv::PerlinNoise perlin{ noiseSeed };
 struct PowerStatus;
 struct Slot;
+struct Update;
 struct Item {
 	string id;
 	uint display = 128 << 16 | '?';//oops
@@ -67,25 +68,10 @@ struct Item {
 	int size = -1;//oops
 	int dmg = 0;
 	int cfg = 0;
-	//int facing = 0;
 	PowerStatus getPower(shared_ptr<Item> that);
 	bool isWorking();
-	/*vector<int> getFacing() {
-		switch (facing) {
-		case 0:
-			return { -1,0,0 };
-		case 1:
-			return { 1,0,0 };
-		case 2:
-			return { 0,-1,0 };
-		case 3:
-			return { 0,1,0 };
-		case 4:
-			return { 0,0,-1 };
-		case 5:
-			return { 0,0,1 };
-		}
-	}*/
+	Update getFacing(Update u, int dist);
+	vector<int> _getFacing();
 	template<class Archive>
 	void serialize(Archive& ar) {
 		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg));
@@ -150,9 +136,6 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	}
 	else if (id == "test_power_void") {
 		s.used = cfg;
-	}
-	else if (id == "player_battery") {
-		
 	}
 	else if (powerMap.find(id) != powerMap.end()) {
 		s.produced = powerMap[id][0]*isWorking();
@@ -318,13 +301,45 @@ struct Update {
 };
 vector<Update> _updates;
 unordered_map<string, int> updatesDone;
+vector<int> Item::_getFacing() {
+	switch (cfg) {
+	case 0:
+		display = (display >> 16) << 16 | '<';
+		return { -1,0,0 };
+	case 1:
+		display = (display >> 16) << 16 | '>';
+		return { 1,0,0 };
+	case 2:
+		display = (display >> 16) << 16 | '^';
+		return { 0,-1,0 };
+	case 3:
+		display = (display >> 16) << 16 | 'v';
+		return { 0,1,0 };
+	case 4:
+		display = (display >> 16) << 16 | 'x';
+		return { 0,0,-1 };
+	case 5:
+		display = (display >> 16) << 16 | '.';
+		return { 0,0,1 };
+	}
+}
+Update Item::getFacing(Update u,int dist){
+	vector<int> f = _getFacing();
+	f[0] *= dist;
+	f[1] *= dist;
+	f[2] *= dist;
+	u.x += f[0];
+	u.y += f[1];
+	u.z += f[2];
+	return u;
+}
 int cursorAt = 0;
 int cursorSel = 0;
 int cursorX = 0, cursorY = 0;
 int cursorObjx, cursorObjy, cursorObjz;
 bool oxygenDeducted = false;
 int playerSpeed = 2;
-bool flight = false;
+bool flight = true;
 string cursorObjplanet;
 shared_ptr<Item> cursorObj;
 enum DisplayMode {
@@ -549,9 +564,15 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 	return mods;
 }
 void processCursor() {
-	if (cursorObj != nullptr && printerRecipes.find(cursorObj->id)!=printerRecipes.end()) {
+	vector<string> dirs = { "platform_power_extenders" };
+	if (cursorObj != nullptr && printerRecipes.find(cursorObj->id) != printerRecipes.end()) {
 		if (key == 'y')cursorObj->cfg++;
 		if (key == 'h')cursorObj->cfg--;
+	}
+	if (cursorObj != nullptr && find(dirs.begin(), dirs.end(), cursorObj->id) != dirs.end()){
+		if (key == 'y')cursorObj->cfg++;
+		cursorObj->cfg %= 6;
+		cursorObj->_getFacing();
 	}
 	if (key == 'u') {
 		cursorAt += 1;
@@ -790,7 +811,7 @@ void processCursor() {
 	}
 }
 void processPlayer() {
-	oxygenDeducted = false;
+	if(!flight)oxygenDeducted = false;
 	if (key == '1')dmode = DNORM;
 	if (key == '2')dmode = DUNDER;
 	if (key == '3')dmode = DABOVE;
@@ -902,6 +923,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	}
 	else if (!u.funnyPower()&&printerRecipes.find(id)!=printerRecipes.end()) {
 		block->dmg += u.lackPower(64/ thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[block->size]);
+		if (block->dmg > 256)block->dmg = 256;
 		processPrinter(u, block);
 	}
 	else if (id == "test_power_siren") {
@@ -910,11 +932,17 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->cfg %= 256;
 		block->display = block->cfg << 16 | '@';
 	}
-	else if (id == "player_oxygen_tank") {//TODO:actually making an oxygen system and respawn system
+	else if (id == "player_oxygen_tank") {//TODO:actually making an respawn system
 		if (oxygenDeducted)return;
 		oxygenDeducted = true;
 		block->dmg--;
 		if (block->dmg <= 0)throw "You died";
+	}
+	else if (id == "portable_oxygenator") {
+		if (u.getBlock() == player.item&&!u.funnyPower()) {
+			player.item->slots[0].content->dmg += u.lackPower(2);
+			if(player.item->slots[0].content->dmg>90)player.item->slots[0].content->dmg = 90;
+		}
 	}
 }
 void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
@@ -929,7 +957,15 @@ void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 		queue.pop_back();
 		if (find(network.begin(), network.end(), t) != network.end())continue;
 		network.push_back(t);
-		if (t.getBlock()->id == "player_oxygen_tank" && !slotted)t.getBlock()->dmg = 90;
+		if (t.getBlock()->id == "player_oxygen_tank" && block->slots[0].content!=nullptr)t.getBlock()->dmg = 90;
+		if (t.getBlock()->id == "platform_power_extenders") {
+			for (int i = 0; i < 16; i++) {
+				Update x = t.getBlock()->getFacing(t, i);
+				if (x.getBlock() == nullptr || !x.getBlock()->id.starts_with("platform_"))continue;
+				queue.push_back(x);
+			}
+			continue;
+		}
 		auto n = t.neighbors();
 		for (int i = 0; i < 6; i++) {
 			Update x = n[i];
@@ -1044,7 +1080,7 @@ int main() {
 			{1,nullptr},
 			{1,nullptr},
 			{1,nullptr},
-			{1,make_shared<Item>(Item{ "platform_pacemaker",(255 << 16) | '@',{},1 }),true},
+			{1,make_shared<Item>(Item{ "platform_pacemaker",(255 << 16) | '@',{{2,nullptr,false,"oxygenator"}},1}),true},
 			{1,make_shared<Item>(Item{ "player_printer",(255 << 16) | '@',{{1,nullptr},{1,nullptr}},1 }),true},
 		},256 }, 0, 0, 0);
 		player.x = player.y = player.z = 0;
@@ -1057,7 +1093,7 @@ int main() {
 			}, 1, 3, 0);
 		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,nullptr,false,"air",true}}, 2
 			}, 1, 4, 0);
-		planets["Sylva"].setBlock({ "test_power_source",(255 << 16) | '@',{},1 ,0,-10 }, 1, 6, 0);
+		planets["Sylva"].setBlock({ "platform_power_extenders",15007779,{},1 }, 1, 6, 0);
 		planets["Sylva"].setBlock({ "test_power_void",(255 << 16) | '@',{},1 ,0,10 }, 1, 7, 0);
 		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,nullptr,false,"air",true}}, 2
 			}, 2, 4, 0);

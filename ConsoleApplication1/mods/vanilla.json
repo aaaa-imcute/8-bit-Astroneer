@@ -128,6 +128,19 @@
                             "zinc"
                         ],
                         "second":{
+                            "id":"platform_power_extenders",
+                            "display":15007779,
+                            "slots":[],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        }
+                    },
+                    {
+                        "first":[
+                            "zinc"
+                        ],
+                        "second":{
                             "id":"mod_range_wide",
                             "display":14024741,
                             "slots":[],
@@ -283,6 +296,32 @@
                             "dmg":0,
                             "cfg":0
                         }
+                    },
+                    {
+                        "first":[
+                            "processor_basic"
+                        ],
+                        "second":{
+                            "id":"platform_pacemaker",
+                            "display":16711744,
+                            "slots":[
+                                {
+                                    "size":2,
+                                    "content":{
+                                        "ptr_wrapper":{
+                                            "id":0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "oxygenator",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size":1,
+                            "dmg":0,
+                            "cfg":0
+                        }
                     }
                 ]
             },
@@ -347,6 +386,20 @@
                                     "qTrig": 0
                                 }
                             ],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0
+                        }
+                    },
+                    {
+                        "first": [
+                            "ceramic",
+                            "iron"
+                        ],
+                        "second": {
+                            "id": "oxygenator",
+                            "display": 10027045,
+                            "slots": [],
                             "size": 2,
                             "dmg": 0,
                             "cfg": 0
