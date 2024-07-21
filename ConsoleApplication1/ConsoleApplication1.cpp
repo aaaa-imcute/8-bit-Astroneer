@@ -28,7 +28,7 @@ using uint = unsigned int;
 using cereal::make_nvp;
 constexpr auto W = 100;
 constexpr auto H = 50;
-constexpr auto MOD_DEV = 1;
+constexpr auto MOD_DEV = 0;
 using namespace std;
 vector<vector<uint> > buf(H, vector<uint>(W, (32 << 16) | ' '));
 char key = 0;
@@ -564,7 +564,7 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 	return mods;
 }
 void processCursor() {
-	vector<string> dirs = { "platform_power_extenders" };
+	vector<string> dirs = { "platform_power_extenders","platform_auto_arm" ,"platform_long_auto_arm" ,"platform_fast_auto_arm" };
 	if (cursorObj != nullptr && printerRecipes.find(cursorObj->id) != printerRecipes.end()) {
 		if (key == 'y')cursorObj->cfg++;
 		if (key == 'h')cursorObj->cfg--;
@@ -910,6 +910,51 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 		}
 	}
 }
+void processAutoArm(Update u,int dist) {
+	Update to = u.getBlock()->getFacing(u, -dist);
+	Update from = u.getBlock()->getFacing(u, dist);
+	string sorter;
+	if (u.getBlock()->slots[1].content == nullptr)sorter = "";
+	else sorter = u.getBlock()->slots[1].content->id;
+	vector<shared_ptr<Item>> queue = { u.getBlock()},network;
+	Slot s,s2;
+	while (!queue.empty()) {
+		auto i = queue[0];
+		queue.erase(queue.begin(), queue.begin() + 1);
+		if (find(network.begin(), network.end(), i) != network.end())continue;
+		if (i == nullptr)continue;
+		network.push_back(i);
+		auto n = i->slots;
+		for (auto j : n) {
+			if (j.content != nullptr && (sorter == "" || j.content->id == sorter) && j.content->size == 1 && !j.locked) {
+				s = j;
+				queue.clear();
+				break;
+			}
+			queue.push_back(j.content);
+		}
+	}
+	queue = { u.getBlock() };
+	network.clear();
+	while (!queue.empty()) {
+		auto i = queue[0];
+		queue.erase(queue.begin(), queue.begin() + 1);
+		if (find(network.begin(), network.end(), i) != network.end())continue;
+		if (i == nullptr)continue;
+		network.push_back(i);
+		auto n = i->slots;
+		for (auto j : n) {
+			if (j.content == nullptr && (j.sorter == "air" || s.content->id == j.sorter) && (j.size == 1||j.uni&&j.size>=1) && !j.locked) {
+				s2 = j;
+				queue.clear();
+				break;
+			}
+			queue.push_back(j.content);
+		}
+	}
+	s2.content = s.content;
+	s.content = nullptr;
+}
 int thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[9] = { 1,2,4,8,16,32,64,128,256 };
 void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	string id = block->id;
@@ -942,6 +987,30 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		if (u.getBlock() == player.item&&!u.funnyPower()) {
 			player.item->slots[0].content->dmg += u.lackPower(2);
 			if(player.item->slots[0].content->dmg>90)player.item->slots[0].content->dmg = 90;
+		}
+	}
+	else if (id == "platform_auto_arm") {
+		if (slotted)return;
+		block->dmg+=u.lackPower(16);
+		if (block->dmg >= 63) {
+			block->dmg = 0;
+			processAutoArm(u, 1);
+		}
+	}
+	else if (id == "platform_long_auto_arm") {
+		if (slotted)return;
+		block->dmg+= u.lackPower(16);
+		if (block->dmg >= 63) {
+			block->dmg = 0;
+			processAutoArm(u, 2);
+		}
+	}
+	else if (id == "platform_fast_auto_arm") {
+		if (slotted)return;
+		block->dmg += u.lackPower(64);
+		if (block->dmg >= 63) {
+			block->dmg = 0;
+			processAutoArm(u, 1);
 		}
 	}
 }
