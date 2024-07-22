@@ -911,30 +911,28 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 	}
 }
 void processAutoArm(Update u,int dist) {
-	Update to = u.getBlock()->getFacing(u, -dist);
-	Update from = u.getBlock()->getFacing(u, dist);
-	string sorter;
-	if (u.getBlock()->slots[1].content == nullptr)sorter = "";
-	else sorter = u.getBlock()->slots[1].content->id;
-	vector<shared_ptr<Item>> queue = { u.getBlock()},network;
-	Slot s,s2;
+	Update to = u.getBlock()->getFacing(u, dist);
+	Update from = u.getBlock()->getFacing(u, -dist);
+	string sorter="air";
+	if (u.getBlock()->slots[1].content != nullptr)sorter = u.getBlock()->slots[1].content->id;
+	vector<shared_ptr<Item>> queue = { from.getBlock()},network;
+	Slot *s=nullptr,*s2=nullptr;
 	while (!queue.empty()) {
 		auto i = queue[0];
 		queue.erase(queue.begin(), queue.begin() + 1);
 		if (find(network.begin(), network.end(), i) != network.end())continue;
 		if (i == nullptr)continue;
 		network.push_back(i);
-		auto n = i->slots;
-		for (auto j : n) {
-			if (j.content != nullptr && (sorter == "" || j.content->id == sorter) && j.content->size == 1 && !j.locked) {
-				s = j;
+		for (auto& j : i->slots) {
+			if (j.content != nullptr && (sorter == "air" || j.content->id == sorter) && j.content->size == 1 && !j.locked) {
+				s = &j;
 				queue.clear();
 				break;
 			}
 			queue.push_back(j.content);
 		}
 	}
-	queue = { u.getBlock() };
+	queue = { to.getBlock() };
 	network.clear();
 	while (!queue.empty()) {
 		auto i = queue[0];
@@ -942,23 +940,44 @@ void processAutoArm(Update u,int dist) {
 		if (find(network.begin(), network.end(), i) != network.end())continue;
 		if (i == nullptr)continue;
 		network.push_back(i);
-		auto n = i->slots;
-		for (auto j : n) {
-			if (j.content == nullptr && (j.sorter == "air" || s.content->id == j.sorter) && (j.size == 1||j.uni&&j.size>=1) && !j.locked) {
-				s2 = j;
+		for (auto& j : i->slots) {
+			if (j.content == nullptr && (j.sorter == "air" || s->content->id == j.sorter) && (j.size == 1||j.uni&&j.size>=1) && !j.locked) {
+				s2 = &j;
 				queue.clear();
 				break;
 			}
 			queue.push_back(j.content);
 		}
 	}
-	s2.content = s.content;
-	s.content = nullptr;
+	if (s==nullptr || s2==nullptr)return;
+	s2->content = s->content;
+	s->content = nullptr;
+	player.updates.push_back(to);
+	player.updates.push_back(from);
+}
+void processCanister(Update u, shared_ptr<Item>block) {
+	string sorter="air";
+	if (block->id.size() > string("canister").size()) {
+		sorter = block->id.substr(string("canister_").size());
+	}
+	if (block->slots[0].content != nullptr&&(sorter=="air" || block->slots[0].content->id.substr(string("resource_").size()) == sorter)&&block->dmg<block->cfg) {
+		if (sorter == "air")block->id = block->id + "_" + block->slots[0].content->id.substr(string("resource_").size());
+		block->dmg++;
+		block->slots[0].content = nullptr;
+	}
+	if (block->slots[1].content == nullptr && block->dmg >0) {
+		block->dmg--;
+		block->slots[1].content = createResource(block->id.substr(string("canister_").size()));
+		if (block->dmg <= 0)block->id = "canister";
+	}
 }
 int thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[9] = { 1,2,4,8,16,32,64,128,256 };
 void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	string id = block->id;
-	if (id == "platform_pacemaker") {
+	if (id.starts_with("canister")) {
+		processCanister(u, block);
+	}
+	else if (id == "platform_pacemaker") {
 		processPacemaker(u, block, slotted);
 	}
 	else if (id == "platform_test_siren") {
@@ -1141,7 +1160,7 @@ int main() {
 			{4,nullptr,false,"air",true},
 			{1,nullptr,false,"air",false,'c'},
 			{1,nullptr,false,"air",false,'v'},
-			{1,make_shared<Item>(Item{ "platform_printer_small",(255 << 16) | '@',{{1,createResource("resin")},{1,nullptr},{2,nullptr}},1 ,0,0})},
+			{1,make_shared<Item>(Item{ "platform_printer_small",(255 << 16) | '@',{{1,createResource("graphite")},{1,createResource("iron")},{2,nullptr}},1 ,0,0})},
 			{1,createResource("exo_alloy")},
 			{1,nullptr},
 			{1,nullptr},
@@ -1157,14 +1176,13 @@ int main() {
 		planets["Sylva"].setBlock({ "test_l_weighted_cube",(255 << 16) | '#',{},3 }, 0, 1, 0);
 		planets["Sylva"].setBlock({ "platform_pacemaker",(255 << 16) | '@',{},1 }, 1, 1, 0);
 		planets["Sylva"].setBlock({ "platform_test_siren",(0 << 16) | '@',{},1 }, 2, 1, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "test_power_source",(255 << 16) | '@',{},1 ,0,10}),false,"air",true}}, 2 }, 1, 2, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,nullptr,false,"air",true}}, 2
-			}, 1, 3, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,nullptr,false,"air",true}}, 2
+		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "canister",16711715,{{1,nullptr},{1,nullptr}},2 ,0,32}),false,"air",true}}, 2 }, 1, 2, 0);
+		
+		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "canister_resin",16711715,{{1,nullptr},{1,nullptr}},2 ,3,32}),false,"air",true}}, 2
 			}, 1, 4, 0);
 		planets["Sylva"].setBlock({ "platform_power_extenders",15007779,{},1 }, 1, 6, 0);
 		planets["Sylva"].setBlock({ "test_power_void",(255 << 16) | '@',{},1 ,0,10 }, 1, 7, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,nullptr,false,"air",true}}, 2
+		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "test_power_source",(255 << 16) | '@',{},1 ,0,10}),false,"air",true}}, 2
 			}, 2, 4, 0);
 		planets["Sylva"].setBlock({ "battery_small",(255 << 16) | '@',{},1 ,0,1 }, 2, 5, 0);
 		player.updates.push_back({ "Sylva",1,1,0 });

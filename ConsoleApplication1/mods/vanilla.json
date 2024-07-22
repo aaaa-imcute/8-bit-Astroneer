@@ -522,6 +522,45 @@
                         }
                     },
                     {
+                        "first": [
+                            "plastic",
+                            "glass"
+                        ],
+                        "second": {
+                            "id": "canister",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 32
+                        }
+                    },
+                    {
                         "first":[
                             "tungsten",
                             "iron"
@@ -1398,6 +1437,45 @@
                             "cfg": 0
                         },
                         "codeNeeded":true
+                    },
+                    {
+                        "first": [
+                            "titanium_alloy",
+                            "glass"
+                        ],
+                        "second": {
+                            "id": "canister",
+                            "display": 16711715,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper":{
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": false,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 3,
+                            "dmg": 0,
+                            "cfg": 400
+                        }
                     },
                     {
                         "first": [
