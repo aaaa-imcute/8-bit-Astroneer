@@ -940,7 +940,7 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 		}
 	}
 }
-void processAutoArm(Update u,int dist) {
+void processAutoArm(Update u, shared_ptr<Item> block, int dist) {
 	Update to = u.getBlock()->getFacing(u, dist);
 	Update from = u.getBlock()->getFacing(u, -dist);
 	string sorter="air";
@@ -1046,7 +1046,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->dmg+=u.lackPower(16);
 		if (block->dmg >= 63) {
 			block->dmg = 0;
-			processAutoArm(u, 1);
+			processAutoArm(u, block, 1);
 		}
 	}
 	else if (block->sig & 1 && id == "platform_long_auto_arm") {
@@ -1054,7 +1054,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->dmg+= u.lackPower(16);
 		if (block->dmg >= 63) {
 			block->dmg = 0;
-			processAutoArm(u, 2);
+			processAutoArm(u, block, 2);
 		}
 	}
 	else if (block->sig & 1 && id == "platform_fast_auto_arm") {
@@ -1062,7 +1062,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->dmg += u.lackPower(64);
 		if (block->dmg >= 63) {
 			block->dmg = 0;
-			processAutoArm(u, 1);
+			processAutoArm(u, block, 1);
 		}
 	}
 	else if (id == "repeater_delay"){
