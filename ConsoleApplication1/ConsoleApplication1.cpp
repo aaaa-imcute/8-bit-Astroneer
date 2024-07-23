@@ -984,6 +984,9 @@ void processAutoArm(Update u,int dist) {
 	s->content = nullptr;
 	player.updates.push_back(to);
 	player.updates.push_back(from);
+	if (block->ptr == nullptr)return;
+	u.flags = 2;
+	processUpdate(u, block->ptr);
 }
 void processCanister(Update u, shared_ptr<Item>block) {
 	string sorter="air";
@@ -1044,9 +1047,6 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		if (block->dmg >= 63) {
 			block->dmg = 0;
 			processAutoArm(u, 1);
-			if (block->ptr == nullptr)return;
-			u.flags = 2;
-			processUpdate(u, block->ptr);
 		}
 	}
 	else if (block->sig & 1 && id == "platform_long_auto_arm") {
