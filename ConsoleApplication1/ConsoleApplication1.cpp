@@ -68,13 +68,15 @@ struct Item {
 	int size = -1;//oops
 	int dmg = 0;
 	int cfg = 0;
+	int sig = 0;
+	shared_ptr<Item> ptr = nullptr;
 	PowerStatus getPower(shared_ptr<Item> that);
 	bool isWorking();
 	Update getFacing(Update u, int dist);
 	vector<int> _getFacing();
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg));
+		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg),make_nvp("sig",sig));
 	}
 };
 struct Slot {
@@ -565,7 +567,7 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 }
 void processCursor() {
 	vector<string> dirs = { "platform_power_extenders","platform_auto_arm" ,"platform_long_auto_arm" ,"platform_fast_auto_arm" };
-	if (cursorObj != nullptr && printerRecipes.find(cursorObj->id) != printerRecipes.end()) {
+	if (cursorObj != nullptr && (printerRecipes.find(cursorObj->id) != printerRecipes.end()||cursorObj->id=="repeater_delay"||cursorObj->id=="repeater_count")) {
 		if (key == 'y')cursorObj->cfg++;
 		if (key == 'h')cursorObj->cfg--;
 	}
@@ -573,6 +575,11 @@ void processCursor() {
 		if (key == 'y')cursorObj->cfg++;
 		cursorObj->cfg %= 6;
 		cursorObj->_getFacing();
+	}
+	if (cursorObj != nullptr && player.item->slots[3].content != nullptr && key == 'z')player.item->slots[3].content->ptr = cursorObj;
+	if (cursorObj != nullptr && key == 'f') {
+		Update u = { cursorObjplanet,cursorObjx,cursorObjy,cursorObjz,80,14,2 };
+		processUpdate(u, cursorObj);
 	}
 	if (key == 'u') {
 		cursorAt += 1;
@@ -817,6 +824,25 @@ void processPlayer() {
 	if (key == '3')dmode = DABOVE;
 	if (key == '4')dmode = DDEPTH;
 
+	if (key == 'c' || key == 'v') {
+		vector<shared_ptr<Item>> queue = { player.item }, network;
+		Slot* s = nullptr, * s2 = nullptr;
+		while (!queue.empty()) {
+			auto i = queue[0];
+			queue.erase(queue.begin(), queue.begin() + 1);
+			if (find(network.begin(), network.end(), i) != network.end())continue;
+			if (i == nullptr)continue;
+			network.push_back(i);
+			for (auto& j : i->slots) {
+				if (j.qTrig == key) {
+					Update u = { player.planet,player.x,player.y,player.z,80,14,2 };
+					processUpdate(u, j.content);
+				}
+				queue.push_back(j.content);
+			}
+		}
+	}
+
 	int px = player.x, py = player.y, pz = player.z;
 	if (!flight)player.z -= 1;
 	if (player.z < 0 || player.z>255 || planets[player.planet].getBlock(player.x, player.y, player.z) != nullptr) {
@@ -857,16 +883,18 @@ void processPacemaker(Update u, shared_ptr<Item> block, bool slotted);
 void processMisc(Update u, shared_ptr<Item> block, bool slotted);
 void processUpdate(Update u, shared_ptr<Item> block) {
 	if (block == nullptr)return;
+	if (u.flags & 2)block->sig = !block->sig;
 	for (auto& a : block->slots) {
 		processUpdate(u, a.content);
 	}
-	processMisc(u, block, true);
+	processMisc(u, block, u.getBlock()!=block);
 }
 void processUpdate(Update u) {
-	if (updatesDone.contains(u.toString()) && (updatesDone[u.toString()] & u.flags) == u.flags)return;
-	updatesDone.insert({ u.toString(),u.flags });
 	auto& block = u.getBlock();
 	if (block == nullptr)return;
+	if (u.flags & 2) block->sig = !block->sig;
+	if (!(u.flags&2)&&updatesDone.contains(u.toString()) && (updatesDone[u.toString()] & u.flags) == u.flags)return;
+	updatesDone.insert({ u.toString(),u.flags });
 	for (auto& a : block->slots) {
 		processUpdate(u, a.content);
 	}
@@ -983,9 +1011,9 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	else if (id == "platform_test_siren") {
 		block->cfg += 17;
 		block->cfg %= 256;
-		block->display = block->cfg << 16 | '@';
+		block->display = (block->sig ? block->cfg : 0) << 16 | '@';
 	}
-	else if (!u.funnyPower()&&printerRecipes.find(id)!=printerRecipes.end()) {
+	else if (block->sig&1&&!u.funnyPower()&&printerRecipes.find(id)!=printerRecipes.end()) {
 		block->dmg += u.lackPower(64/ thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[block->size]);
 		if (block->dmg > 256)block->dmg = 256;
 		processPrinter(u, block);
@@ -994,7 +1022,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		if (u.funnyPower())return;
 		block->cfg += u.lackPower(17);
 		block->cfg %= 256;
-		block->display = block->cfg << 16 | '@';
+		block->display = (block->sig?block->cfg:0) << 16 | '@';
 	}
 	else if (id == "player_oxygen_tank") {//TODO:actually making an respawn system
 		if (oxygenDeducted)return;
@@ -1002,21 +1030,24 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->dmg--;
 		if (block->dmg <= 0)throw "You died";
 	}
-	else if (id == "portable_oxygenator") {
+	else if (block->sig & 1 && id == "portable_oxygenator") {
 		if (u.getBlock() == player.item&&!u.funnyPower()) {
 			player.item->slots[0].content->dmg += u.lackPower(2);
 			if(player.item->slots[0].content->dmg>90)player.item->slots[0].content->dmg = 90;
 		}
 	}
-	else if (id == "platform_auto_arm") {
+	else if (block->sig & 1 && id == "platform_auto_arm") {
 		if (slotted)return;
 		block->dmg+=u.lackPower(16);
 		if (block->dmg >= 63) {
 			block->dmg = 0;
 			processAutoArm(u, 1);
+			if (block->ptr == nullptr)return;
+			u.flags = 2;
+			processUpdate(u, block->ptr);
 		}
 	}
-	else if (id == "platform_long_auto_arm") {
+	else if (block->sig & 1 && id == "platform_long_auto_arm") {
 		if (slotted)return;
 		block->dmg+= u.lackPower(16);
 		if (block->dmg >= 63) {
@@ -1024,12 +1055,31 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 			processAutoArm(u, 2);
 		}
 	}
-	else if (id == "platform_fast_auto_arm") {
+	else if (block->sig & 1 && id == "platform_fast_auto_arm") {
 		if (slotted)return;
 		block->dmg += u.lackPower(64);
 		if (block->dmg >= 63) {
 			block->dmg = 0;
 			processAutoArm(u, 1);
+		}
+	}
+	else if (id == "repeater_delay"){
+		if (block->dmg >= 0)block->dmg++;
+		if (block->dmg >= block->cfg) {
+			block->dmg = -1;
+			if (block->ptr == nullptr)return;
+			u.flags = 2;
+			processUpdate(u,block->ptr);
+		}
+		if (block->dmg == -1 && u.flags & 2)block->dmg = 0;
+	}
+	else if (id == "repeater_count") {
+		if (u.flags & 2)block->dmg++;
+		if (block->dmg >= block->cfg) {
+			block->dmg = 0;
+			if (block->ptr == nullptr)return;
+			u.flags = 2;
+			processUpdate(u, block->ptr);
 		}
 	}
 }

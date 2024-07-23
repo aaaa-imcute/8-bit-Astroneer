@@ -3,21 +3,21 @@
         "description": "Vanilla datapack",
         "recipes": [
             {
-                "key":"player_printer",
-                "value":[
+                "key": "player_printer",
+                "value": [
                     {
-                        "first":[
+                        "first": [
                             "resin"
                         ],
-                        "second":{
-                            "id":"platform_printer_small",
-                            "display":16711744,
-                            "slots":[
+                        "second": {
+                            "id": "platform_printer_small",
+                            "display": 16711744,
+                            "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -26,10 +26,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -38,10 +38,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":2,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 2,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -50,36 +50,48 @@
                                     "qTrig": 0
                                 }
                             ],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "exo_alloy"
                         ],
-                        "second":{
-                            "id":"portable_oxygenator",
-                            "display":10027072,
-                            "slots":[],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "portable_oxygenator",
+                            "display": 10027072,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "resin"
                         ],
-                        "second":{
-                            "id":"generator_small",
-                            "display":15007781,
-                            "slots":[
+                        "second": {
+                            "id": "generator_small",
+                            "display": 15007781,
+                            "slots": [
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -89,157 +101,223 @@
                                     "qTrig": 0
                                 }
                             ],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         },
-                        "codeNeeded":true
+                        "codeNeeded": true
                     },
                     {
-                        "first":[
+                        "first": [
                             "coal"
                         ],
-                        "second":{
-                            "id":"power_cell",
-                            "display":15007779,
-                            "slots":[],
-                            "size":1,
-                            "dmg":480,
-                            "cfg":0
+                        "second": {
+                            "id": "power_cell",
+                            "display": 15007779,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 480,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         },
-                        "codeNeeded":true
+                        "codeNeeded": true
                     },
                     {
-                        "first":[
+                        "first": [
                             "zinc"
                         ],
-                        "second":{
-                            "id":"battery_small",
-                            "display":15007779,
-                            "slots":[],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "battery_small",
+                            "display": 15007779,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "zinc"
                         ],
-                        "second":{
-                            "id":"platform_power_extenders",
-                            "display":15007779,
-                            "slots":[],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "platform_power_extenders",
+                            "display": 15007779,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "zinc"
                         ],
-                        "second":{
-                            "id":"mod_range_wide",
-                            "display":14024741,
-                            "slots":[],
-                            "size":1,
-                            "dmg":1,
-                            "cfg":0
+                        "second": {
+                            "id": "mod_range_wide",
+                            "display": 14024741,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 1,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "zinc"
                         ],
-                        "second":{
-                            "id":"mod_range_narrow",
-                            "display":14024741,
-                            "slots":[],
-                            "size":1,
-                            "dmg":-1,
-                            "cfg":0
+                        "second": {
+                            "id": "mod_range_narrow",
+                            "display": 14024741,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": -1,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "zinc"
                         ],
-                        "second":{
-                            "id":"mod_inhibit",
-                            "display":14024741,
-                            "slots":[],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "mod_inhibit",
+                            "display": 14024741,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         },
-                        "codeNeeded":true
+                        "codeNeeded": true
                     },
                     {
-                        "first":[
+                        "first": [
                             "ceramic"
                         ],
-                        "second":{
-                            "id":"mod_drill_1",
-                            "display":14024741,
-                            "slots":[],
-                            "size":1,
-                            "dmg":1,
-                            "cfg":0
+                        "second": {
+                            "id": "mod_drill_1",
+                            "display": 14024741,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 1,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "tungsten_carbide"
                         ],
-                        "second":{
-                            "id":"mod_drill_2",
-                            "display":14024741,
-                            "slots":[],
-                            "size":1,
-                            "dmg":2,
-                            "cfg":0
+                        "second": {
+                            "id": "mod_drill_2",
+                            "display": 14024741,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 2,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "diamond"
                         ],
-                        "second":{
-                            "id":"mod_drill_3",
-                            "display":14024741,
-                            "slots":[],
-                            "size":1,
-                            "dmg":3,
-                            "cfg":0
+                        "second": {
+                            "id": "mod_drill_3",
+                            "display": 14024741,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 3,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "explosive_powder"
                         ],
-                        "second":{
-                            "id":"mod_dynamite",
-                            "display":14024741,
-                            "slots":[],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "mod_dynamite",
+                            "display": 14024741,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         },
-                        "codeNeeded":true
+                        "codeNeeded": true
                     },
                     {
-                        "first":[
+                        "first": [
                             "titanium_alloy"
                         ],
-                        "second":{
-                            "id":"jetpack_hydrazine",
-                            "display":14024741,
-                            "slots":[
+                        "second": {
+                            "id": "jetpack_hydrazine",
+                            "display": 14024741,
+                            "slots": [
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -249,66 +327,90 @@
                                     "qTrig": 0
                                 }
                             ],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         },
-                        "codeNeeded":true
+                        "codeNeeded": true
                     },
                     {
-                        "first":[
+                        "first": [
                             "quartz"
                         ],
-                        "second":{
-                            "id":"_processor_basic",
-                            "display":201,
-                            "slots":[],
-                            "size":0,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "_processor_basic",
+                            "display": 201,
+                            "slots": [],
+                            "size": 0,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "exo_alloy",
                             "astronium"
                         ],
-                        "second":{
-                            "id":"_processor_advanced",
-                            "display":129,
-                            "slots":[],
-                            "size":0,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "_processor_advanced",
+                            "display": 129,
+                            "slots": [],
+                            "size": 0,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "exo_alloy",
                             "processor_advanced"
                         ],
-                        "second":{
-                            "id":"rtg_small",
-                            "display":15007781,
-                            "slots":[],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "rtg_small",
+                            "display": 15007781,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "processor_basic"
                         ],
-                        "second":{
-                            "id":"platform_pacemaker",
-                            "display":16711744,
-                            "slots":[
+                        "second": {
+                            "id": "platform_pacemaker",
+                            "display": 16711744,
+                            "slots": [
                                 {
-                                    "size":2,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 2,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -317,9 +419,15 @@
                                     "qTrig": 0
                                 }
                             ],
-                            "size":1,
-                            "dmg":0,
-                            "cfg":0
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
@@ -337,10 +445,10 @@
                             "display": 16711744,
                             "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -349,10 +457,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -361,10 +469,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -373,10 +481,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":3,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 3,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -387,7 +495,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -401,7 +515,13 @@
                             "slots": [],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -416,7 +536,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -428,7 +548,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -440,7 +560,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -455,7 +581,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -467,7 +593,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -479,7 +605,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -494,7 +626,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -506,7 +638,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -518,7 +650,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -533,7 +671,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -545,7 +683,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -557,22 +695,28 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 32
+                            "cfg": 32,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "tungsten",
                             "iron"
                         ],
-                        "second":{
-                            "id":"generator_medium",
-                            "display":15007781,
-                            "slots":[
+                        "second": {
+                            "id": "generator_medium",
+                            "display": 15007781,
+                            "slots": [
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -582,37 +726,55 @@
                                     "qTrig": 0
                                 }
                             ],
-                            "size":2,
-                            "dmg":0,
-                            "cfg":0
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         },
-                        "codeNeeded":true
+                        "codeNeeded": true
                     },
                     {
-                        "first":[
+                        "first": [
                             "zinc"
                         ],
-                        "second":{
-                            "id":"battery_medium",
-                            "display":15007779,
-                            "slots":[],
-                            "size":2,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "battery_medium",
+                            "display": 15007779,
+                            "slots": [],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
-                        "first":[
+                        "first": [
                             "exo_alloy",
                             "lithium"
                         ],
-                        "second":{
-                            "id":"rtg_medium",
-                            "display":15007781,
-                            "slots":[],
-                            "size":2,
-                            "dmg":0,
-                            "cfg":0
+                        "second": {
+                            "id": "rtg_medium",
+                            "display": 15007781,
+                            "slots": [],
+                            "size": 2,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -626,7 +788,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -638,7 +800,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -653,7 +821,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -665,7 +833,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -677,7 +845,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -689,7 +857,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -704,7 +878,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -716,7 +890,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -728,7 +902,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -743,7 +923,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -755,7 +935,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -767,7 +947,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -779,7 +959,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -791,7 +971,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -803,7 +983,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -815,7 +995,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -827,7 +1007,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -839,7 +1019,13 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -854,7 +1040,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -866,7 +1052,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -878,7 +1064,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -890,7 +1076,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -902,7 +1088,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -914,7 +1100,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -926,7 +1112,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -938,7 +1124,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -950,7 +1136,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -962,7 +1148,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -974,7 +1160,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -986,7 +1172,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -998,7 +1184,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1010,7 +1196,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1022,7 +1208,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1034,7 +1220,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1046,7 +1232,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1058,7 +1244,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1070,7 +1256,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1082,7 +1268,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1094,7 +1280,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1106,7 +1292,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1118,7 +1304,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1130,7 +1316,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1142,14 +1328,20 @@
                             ],
                             "size": 2,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
             },
             {
-                "key":"printer_medium",
-                "value":[
+                "key": "printer_medium",
+                "value": [
                     {
                         "first": [
                             "processor_advanced",
@@ -1161,10 +1353,10 @@
                             "display": 16711744,
                             "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1173,10 +1365,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1185,10 +1377,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1197,10 +1389,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1209,10 +1401,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":4,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 4,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1223,7 +1415,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1237,10 +1435,10 @@
                             "display": 16711744,
                             "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1249,10 +1447,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1263,7 +1461,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1276,10 +1480,10 @@
                             "display": 16711744,
                             "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1288,10 +1492,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1302,7 +1506,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1316,10 +1526,10 @@
                             "display": 16711744,
                             "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1328,10 +1538,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1342,7 +1552,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1356,10 +1572,10 @@
                             "display": 16711744,
                             "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1368,10 +1584,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1380,10 +1596,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1392,10 +1608,10 @@
                                     "qTrig": 0
                                 },
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1406,7 +1622,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1420,10 +1642,10 @@
                             "display": 16711744,
                             "slots": [
                                 {
-                                    "size":1,
-                                    "content":{
-                                        "ptr_wrapper":{
-                                            "id":0
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
                                         }
                                     },
                                     "locked": false,
@@ -1434,9 +1656,15 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         },
-                        "codeNeeded":true
+                        "codeNeeded": true
                     },
                     {
                         "first": [
@@ -1450,7 +1678,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1462,7 +1690,7 @@
                                 {
                                     "size": 1,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1474,7 +1702,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 400
+                            "cfg": 400,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1489,7 +1723,7 @@
                                 {
                                     "size": 3,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1501,7 +1735,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1517,7 +1757,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1529,7 +1769,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1541,7 +1781,7 @@
                                 {
                                     "size": 3,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1553,7 +1793,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1569,7 +1815,7 @@
                                 {
                                     "size": 3,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1581,7 +1827,7 @@
                                 {
                                     "size": 3,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1593,7 +1839,13 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1609,7 +1861,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1621,7 +1873,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1633,7 +1885,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1645,7 +1897,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1657,7 +1909,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1669,7 +1921,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1681,7 +1933,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1693,7 +1945,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1705,7 +1957,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1717,7 +1969,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1729,7 +1981,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1741,7 +1993,7 @@
                                 {
                                     "size": 2,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1753,14 +2005,20 @@
                             ],
                             "size": 3,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
             },
             {
-                "key":"printer_large",
-                "value":[
+                "key": "printer_large",
+                "value": [
                     {
                         "first": [
                             "resin",
@@ -1774,7 +2032,7 @@
                                 {
                                     "size": 4,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1786,7 +2044,13 @@
                             ],
                             "size": 4,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1803,7 +2067,7 @@
                                 {
                                     "size": 3,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1815,7 +2079,7 @@
                                 {
                                     "size": 3,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1827,7 +2091,7 @@
                                 {
                                     "size": 4,
                                     "content": {
-                                        "ptr_wrapper":{
+                                        "ptr_wrapper": {
                                             "id": 0
                                         }
                                     },
@@ -1839,14 +2103,20 @@
                             ],
                             "size": 4,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
             },
             {
-                "key":"pyrolysis_lab",
-                "value":[
+                "key": "pyrolysis_lab",
+                "value": [
                     {
                         "first": [
                             "plant_matter"
@@ -1857,7 +2127,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1870,7 +2146,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1883,14 +2165,20 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
             },
             {
-                "key":"soil_centrifuge",
-                "value":[
+                "key": "soil_centrifuge",
+                "value": [
                     {
                         "first": [
                             "soil_64"
@@ -1901,7 +2189,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1914,7 +2208,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1927,7 +2227,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1940,7 +2246,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -1953,14 +2265,20 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
             },
             {
-                "key":"compost",
-                "value":[
+                "key": "compost",
+                "value": [
                     {
                         "first": [
                             "plant_matter"
@@ -1971,14 +2289,20 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 128,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
             },
             {
-                "key":"chemistry_lab",
-                "value":[
+                "key": "chemistry_lab",
+                "value": [
                     {
                         "first": [
                             "hydrogen",
@@ -1990,7 +2314,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2005,7 +2335,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2020,7 +2356,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2035,7 +2377,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2050,7 +2398,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2064,7 +2418,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2078,7 +2438,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2092,7 +2458,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2107,7 +2479,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2121,7 +2499,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2135,7 +2519,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2150,7 +2540,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2163,7 +2559,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     },
                     {
@@ -2176,7 +2578,13 @@
                             "slots": [],
                             "size": 1,
                             "dmg": 0,
-                            "cfg": 0
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
                         }
                     }
                 ]
@@ -2263,7 +2671,7 @@
                     0,
                     0
                 ],
-                "comment":"compost->soil centrifuge->pyrolysis lab->medium generator cycle produces 1.152 kj,so soil centrifuge+pyrolysis lab<=37.5w for it to produce net energy.i want it to be a small but existing energy."
+                "comment": "compost->soil centrifuge->pyrolysis lab->medium generator cycle produces 1.152 kj,so soil centrifuge+pyrolysis lab<=37.5w for it to produce net energy.i want it to be a small but existing energy."
             },
             {
                 "key": "soil_centrifuge",
@@ -2347,212 +2755,236 @@
                 ]
             }
         ],
-        "resourceColors":[
+        "resourceColors": [
             {
-                "key":"resin",
-                "value":220
+                "key": "resin",
+                "value": 220
             },
             {
-                "key":"quartz",
-                "value":231
+                "key": "quartz",
+                "value": 231
             },
             {
-                "key":"glass",
-                "value":229
+                "key": "glass",
+                "value": 229
             },
             {
-                "key":"processor_basic",
-                "value":201,
-                "comment":"made from quartz,function similar to compound in original"
+                "key": "processor_basic",
+                "value": 201,
+                "comment": "made from quartz,function similar to compound in original"
             },
             {
-                "key":"processor_advanced",
-                "value":129,
-                "comment":"exo chip"
+                "key": "processor_advanced",
+                "value": 129,
+                "comment": "exo chip"
             },
             {
-                "key":"astronium",
-                "value":165
+                "key": "astronium",
+                "value": 165
             },
             {
-                "key":"plant_matter",
-                "value":40,
-                "comment":"organic"
+                "key": "plant_matter",
+                "value": 40,
+                "comment": "organic"
             },
             {
-                "key":"spodumene",
-                "value":94,
-                "comment":"replaces lithium as a ore,goes through ore refinery to get 1 lithium and 1 aluminum"
+                "key": "spodumene",
+                "value": 94,
+                "comment": "replaces lithium as a ore,goes through ore refinery to get 1 lithium and 1 aluminum"
             },
             {
-                "key":"tungsten",
-                "value":226,
-                "comment":"replaces wolframite as a ore,color from tungsten acid"
+                "key": "tungsten",
+                "value": 226,
+                "comment": "replaces wolframite as a ore,color from tungsten acid"
             },
             {
-                "key":"iron",
-                "value":250,
-                "comment":"replaces aluminium as a printing ingredient,now found in the outer core of all planets.this is going to be haaaard!"
+                "key": "iron",
+                "value": 250,
+                "comment": "replaces aluminium as a printing ingredient,now found in the outer core of all planets.this is going to be haaaard!"
             },
             {
-                "key":"copper",
-                "value":88,
-                "comment":"replaces malachite as a ore"
+                "key": "copper",
+                "value": 88,
+                "comment": "replaces malachite as a ore"
             },
             {
-                "key":"aluminium",
-                "value":255,
-                "comment":"replaces iron as a printing ingredient"
+                "key": "aluminium",
+                "value": 255,
+                "comment": "replaces iron as a printing ingredient"
             },
             {
-                "key":"lithium",
-                "value":162,
-                "comment":"color from emission spectra"
+                "key": "lithium",
+                "value": 162,
+                "comment": "color from emission spectra"
             },
             {
-                "key":"titanium",
-                "value":54,
-                "comment":"replaces titanite as a ore,color from titanium complex with water (?)"
+                "key": "titanium",
+                "value": 54,
+                "comment": "replaces titanite as a ore,color from titanium complex with water (?)"
             },
             {
-                "key":"zinc",
-                "value":42,
-                "comment":"replaces sphalerite as ore,color from arsenic ore because they are found together.poor exo,they have to work with contaminated metal..."
+                "key": "zinc",
+                "value": 42,
+                "comment": "replaces sphalerite as ore,color from arsenic ore because they are found together.poor exo,they have to work with contaminated metal..."
             },
             {
-                "key":"ceramic",
-                "value":130,
-                "comment":"replaces clay as a ore"
+                "key": "ceramic",
+                "value": 130,
+                "comment": "replaces clay as a ore"
             },
             {
-                "key":"ammonium",
-                "value":166,
-                "comment":"color from no2 because i couldn't think of a ammonium compound that has color :( enough colorless/white stuff!"
+                "key": "ammonium",
+                "value": 166,
+                "comment": "color from no2 because i couldn't think of a ammonium compound that has color :( enough colorless/white stuff!"
             },
             {
-                "key":"graphite",
-                "value":241,
-                "comment":"made from smelting plant matter.instead,coal takes the place of the ore"
+                "key": "graphite",
+                "value": 241,
+                "comment": "made from smelting plant matter.instead,coal takes the place of the ore"
             },
             {
-                "key":"coal",
-                "value":232,
-                "comment":"found where graphite was.it is not normal for highly regular crystals of carbon to spontanousily form from the ground,right?"
+                "key": "coal",
+                "value": 232,
+                "comment": "found where graphite was.it is not normal for highly regular crystals of carbon to spontanousily form from the ground,right?"
             },
             {
-                "key":"methane",
-                "value":189,
-                "comment":"color from uranus/neptune"
+                "key": "methane",
+                "value": 189,
+                "comment": "color from uranus/neptune"
             },
             {
-                "key":"propane",
-                "value":196,
-                "comment":"used to make plastic,color from tank color"
+                "key": "propane",
+                "value": 196,
+                "comment": "used to make plastic,color from tank color"
             },
             {
-                "key":"oleum",
-                "value":11,
-                "comment":"color from sulfur because oleum doesnt have color,replaces sulfur as an atmospheric resource"
+                "key": "oleum",
+                "value": 11,
+                "comment": "color from sulfur because oleum doesnt have color,replaces sulfur as an atmospheric resource"
             },
             {
-                "key":"hydrogen_peroxide",
-                "value":153,
-                "comment":"used to make plastic and explosive powder,color from liquid oxygen,made from hydrogen and hydrogen"
+                "key": "hydrogen_peroxide",
+                "value": 153,
+                "comment": "used to make plastic and explosive powder,color from liquid oxygen,made from hydrogen and hydrogen"
             },
             {
-                "key":"hydrogen",
-                "value":230,
-                "comment":"color from somebody talking about solid hydrogen being light yellow.(sus)"
+                "key": "hydrogen",
+                "value": 230,
+                "comment": "color from somebody talking about solid hydrogen being light yellow.(sus)"
             },
             {
-                "key":"silicone",
-                "value":80,
-                "comment":"made from quartz quartz and methane"
+                "key": "silicone",
+                "value": 80,
+                "comment": "made from quartz quartz and methane"
             },
             {
-                "key":"rubber",
-                "value":236,
-                "comment":"sulfonated rubber.made from resin resin and oleum"
+                "key": "rubber",
+                "value": 236,
+                "comment": "sulfonated rubber.made from resin resin and oleum"
             },
             {
-                "key":"plastic",
-                "value":180,
-                "comment":"made from hydrogen peroxide and propane.color from a microwave oven food container thing i had a long time ago.(probably unrelated to polypropene,instead probably related to sodium"
+                "key": "plastic",
+                "value": 180,
+                "comment": "made from hydrogen peroxide and propane.color from a microwave oven food container thing i had a long time ago.(probably unrelated to polypropene,instead probably related to sodium"
             },
             {
-                "key":"explosive_powder",
-                "value":209,
-                "comment":"oxidizer+reducer=booom(three os for ozone) made from hydrazine and hydrogen peroxide.color from comical representation of 'booom'"
+                "key": "explosive_powder",
+                "value": 209,
+                "comment": "oxidizer+reducer=booom(three os for ozone) made from hydrazine and hydrogen peroxide.color from comical representation of 'booom'"
             },
             {
-                "key":"tungsten_carbide",
-                "value":172,
-                "comment":"color from blending the ingredients"
+                "key": "tungsten_carbide",
+                "value": 172,
+                "comment": "color from blending the ingredients"
             },
             {
-                "key":"steel",
-                "value":252,
-                "comment":"color from iron but 'more metalic and clean'"
+                "key": "steel",
+                "value": 252,
+                "comment": "color from iron but 'more metalic and clean'"
             },
             {
-                "key":"hydrazine",
-                "value":208,
-                "comment":"made from ammonium and ammonium,color from comical representation of 'bhhhhm'(four h for hydrazine)"
+                "key": "hydrazine",
+                "value": 208,
+                "comment": "made from ammonium and ammonium,color from comical representation of 'bhhhhm'(four h for hydrazine)"
             },
             {
-                "key":"graphene",
-                "value":247,
-                "comment":"color from metalic+graphite,made from graphite and graphite"
+                "key": "graphene",
+                "value": 247,
+                "comment": "color from metalic+graphite,made from graphite and graphite"
             },
             {
-                "key":"diamond",
-                "value":153,
-                "comment":"color from comical representation of diamond,made from graphene and graphene"
+                "key": "diamond",
+                "value": 153,
+                "comment": "color from comical representation of diamond,made from graphene and graphene"
             },
             {
-                "key":"titanium_alloy",
-                "value":91,
-                "comment":"made from titanium and iron,color from blending ingredients"
+                "key": "titanium_alloy",
+                "value": 91,
+                "comment": "made from titanium and iron,color from blending ingredients"
             },
             {
-                "key":"exo_alloy",
-                "value":177,
-                "comment":"nanocarbon alloy.cold fusion via crystal confinement.made from helium astronium and diamond"
+                "key": "exo_alloy",
+                "value": 177,
+                "comment": "nanocarbon alloy.cold fusion via crystal confinement.made from helium astronium and diamond"
             },
             {
-                "key":"scrap",
-                "value":243
+                "key": "scrap",
+                "value": 243
             }
         ],
-        "planets":[
+        "planets": [
             {
-                "key":"Sylva",
-                "value":{
-                    "difficulty":0,
-                    "ores":[
+                "key": "Sylva",
+                "value": {
+                    "difficulty": 0,
+                    "ores": [
                         {
-                            "ores":["resin","iron","astronium"],
-                            "thresh":0.6
+                            "ores": [
+                                "resin",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
                         },
                         {
-                            "ores":["plant_matter","iron","coal"],
-                            "thresh":0.6
+                            "ores": [
+                                "plant_matter",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.6
                         },
                         {
-                            "ores":["ammonium","iron","quartz"],
-                            "thresh":0.6
+                            "ores": [
+                                "ammonium",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.6
                         },
                         {
-                            "ores":["clay","iron","astronium"],
-                            "thresh":0.7
+                            "ores": [
+                                "clay",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.7
                         },
                         {
-                            "ores":["coal","iron","coal"],
-                            "thresh":0.7
+                            "ores": [
+                                "coal",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.7
                         },
                         {
-                            "ores":["quartz","iron","quartz"],
-                            "thresh":0.7
+                            "ores": [
+                                "quartz",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.7
                         }
                     ]
                 }
