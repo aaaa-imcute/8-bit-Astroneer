@@ -565,6 +565,8 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 	}
 	return mods;
 }
+void processUpdate(Update u,shared_ptr<Item> block);
+void processUpdate(Update u);
 void processCursor() {
 	vector<string> dirs = { "platform_power_extenders","platform_auto_arm" ,"platform_long_auto_arm" ,"platform_fast_auto_arm" };
 	if (cursorObj != nullptr && (printerRecipes.find(cursorObj->id) != printerRecipes.end()||cursorObj->id=="repeater_delay"||cursorObj->id=="repeater_count")) {
