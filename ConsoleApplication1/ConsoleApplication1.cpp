@@ -167,6 +167,7 @@ shared_ptr<Item> createNull() {
 shared_ptr<Item> createItem(Item i) {
 	return make_shared<Item>(i);
 }
+vector<string> planetNames = { "Sylva","Desolo","Calidor","Vesania","Novus","Atrox" };
 vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, int y) {
 	vector<vector<vector<shared_ptr<Item> > > > a;
 	a.resize(256);
@@ -183,7 +184,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 		for (int j = 0; j < 16; j++) {
 			heightmap[i][j].resize(16);
 			for (int k = 0; k < 16; k++) {
-				heightmap[i][j][k] = int(4 * perlin.noise3D((x * 16 + j) * 0.1, (y * 16 + k) * 0.1, i) + 10 * i);
+				heightmap[i][j][k] = int(4 * perlin.noise3D((x * 16 + j) * 0.1, (y * 16 + k) * 0.1, i+256*(find(planetNames.begin(),planetNames.end(),planet)-planetNames.begin())) + 10 * i);
 			}
 		}
 	}
@@ -195,7 +196,7 @@ vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, in
 					if (l < 0 || l>255)continue;
 					int hardness = 3 - i / 2 + planetDiff;
 					for (int o = 0; o < ores.size(); o++) {
-						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 256 + l) * 0.2) > ores[o].thresh) {//dont add more than 256 planets.
+						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 256 + 256 * (find(planetNames.begin(), planetNames.end(), planet) - planetNames.begin()) + l) * 0.2) > ores[o].thresh) {//dont add more than 256 planets.
 							string id = ores[o].ores[hardness - planetDiff-1];
 							a[l][k][j] = createItem({id + "_placed",uint(resourceColors[id]) << 16 | '-',{},256,hardness});
 							break;
@@ -583,6 +584,23 @@ void processCursor() {
 		Update u = { cursorObjplanet,cursorObjx,cursorObjy,cursorObjz,80,14,2 };
 		processUpdate(u, cursorObj);
 	}
+	if (key == 'c' || key == 'v') {
+		vector<shared_ptr<Item>> queue = { player.item }, network;
+		while (!queue.empty()) {
+			auto i = queue[0];
+			queue.erase(queue.begin(), queue.begin() + 1);
+			if (find(network.begin(), network.end(), i) != network.end())continue;
+			if (i == nullptr)continue;
+			network.push_back(i);
+			for (auto& j : i->slots) {
+				if (j.qTrig == key) {
+					Update u = { player.planet,player.x,player.y,player.z,80,14,2 };
+					processUpdate(u, j.content);
+				}
+				queue.push_back(j.content);
+			}
+		}
+	}
 	if (key == 'u') {
 		cursorAt += 1;
 		cursorAt %= 3;
@@ -826,25 +844,6 @@ void processPlayer() {
 	if (key == '3')dmode = DABOVE;
 	if (key == '4')dmode = DDEPTH;
 
-	if (key == 'c' || key == 'v') {
-		vector<shared_ptr<Item>> queue = { player.item }, network;
-		Slot* s = nullptr, * s2 = nullptr;
-		while (!queue.empty()) {
-			auto i = queue[0];
-			queue.erase(queue.begin(), queue.begin() + 1);
-			if (find(network.begin(), network.end(), i) != network.end())continue;
-			if (i == nullptr)continue;
-			network.push_back(i);
-			for (auto& j : i->slots) {
-				if (j.qTrig == key) {
-					Update u = { player.planet,player.x,player.y,player.z,80,14,2 };
-					processUpdate(u, j.content);
-				}
-				queue.push_back(j.content);
-			}
-		}
-	}
-
 	int px = player.x, py = player.y, pz = player.z;
 	if (!flight)player.z -= 1;
 	if (player.z < 0 || player.z>255 || planets[player.planet].getBlock(player.x, player.y, player.z) != nullptr) {
@@ -1005,6 +1004,28 @@ void processCanister(Update u, shared_ptr<Item>block) {
 	}
 }
 int thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[9] = { 1,2,4,8,16,32,64,128,256 };
+void shuttleItem(Update u, string planet) {
+	Update v = u;
+	v.planet = planet;
+	v.z = 255;
+	while (v.getBlock() == nullptr) v.z--;
+	v.z++;
+	v.getBlock() = u.getBlock();
+	u.getBlock() = nullptr;
+}
+void processRocket(Update u, int eff) {
+	if (u.getBlock()->slots[0].content != nullptr) {
+		u.getBlock()->slots[0].content = nullptr;
+		u.getBlock()->dmg += eff;
+	}
+	if (u.flags & 2 && u.getBlock()->dmg >= 2) {
+		u.getBlock()->dmg -= 2;
+		shuttleItem(u, planetNames[u.getBlock()->cfg]);
+		if (u.getBlock()->ptr != nullptr && u.getBlock()->ptr->size == 256) {//anti-dumbdumb design,not going to launch player if they dont intend to
+			shuttleItem({ player.planet,player.x,player.y,player.z }, planetNames[u.getBlock()->cfg]);
+		}
+	}
+}
 void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	string id = block->id;
 	if (id.starts_with("canister")) {
@@ -1083,6 +1104,12 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 			u.flags = 2;
 			processUpdate(u, block->ptr);
 		}
+	}
+	else if (id == "platform_rocket_small") {
+		processRocket(u, 4);
+	}
+	else if (id == "platform_rocket_large") {
+		processRocket(u, 8);
 	}
 }
 void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {

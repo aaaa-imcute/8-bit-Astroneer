@@ -2149,6 +2149,99 @@
                                 }
                             }
                         }
+                    },
+                    {
+                        "first": [
+                            "aluminum",
+                            "aluminum",
+                            "aluminum"
+                        ],
+                        "second": {
+                            "id": "platform_rocket_small",
+                            "display": 16711717,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "ammonium",
+                                    "uni": true,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 2,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 4,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "first": [
+                            "exo_alloy",
+                            "steel",
+                            "ceramic",
+                            "titanium_alloy"
+                        ],
+                        "second": {
+                            "id": "platform_rocket_large",
+                            "display": 16711717,
+                            "slots": [
+                                {
+                                    "size": 1,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "hydrazine",
+                                    "uni": true,
+                                    "qTrig": 0
+                                },
+                                {
+                                    "size": 4,
+                                    "content": {
+                                        "ptr_wrapper": {
+                                            "id": 0
+                                        }
+                                    },
+                                    "locked": false,
+                                    "sorter": "air",
+                                    "uni": true,
+                                    "qTrig": 0
+                                }
+                            ],
+                            "size": 4,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
+                        }
                     }
                 ]
             },
@@ -2975,6 +3068,326 @@
                 "key": "Sylva",
                 "value": {
                     "difficulty": 0,
+                    "ores": [
+                        {
+                            "ores": [
+                                "zinc",
+                                "copper",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "resin",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "plant_matter",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "ammonium",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "clay",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "coal",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "quartz",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.7
+                        }
+                    ]
+                }
+            },
+            {
+                "key": "Desolo",
+                "value": {
+                    "difficulty": 1,
+                    "ores": [
+                        {
+                            "ores": [
+                                "tungsten",
+                                "zinc",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "resin",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "plant_matter",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "ammonium",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "clay",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "coal",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "quartz",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.7
+                        }
+                    ]
+                }
+            },
+            {
+                "key": "Calidor",
+                "value": {
+                    "difficulty": 1,
+                    "ores": [
+                        {
+                            "ores": [
+                                "copper",
+                                "tungsten",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "resin",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "plant_matter",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "ammonium",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "clay",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "coal",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "quartz",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.7
+                        }
+                    ]
+                }
+            },
+            {
+                "key": "Vesania",
+                "value": {
+                    "difficulty": 2,
+                    "ores": [
+                        {
+                            "ores": [
+                                "spodumene",
+                                "titanium",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "resin",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "plant_matter",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "ammonium",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "clay",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "coal",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "quartz",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.7
+                        }
+                    ]
+                }
+            },
+            {
+                "key": "Novus",
+                "value": {
+                    "difficulty": 2,
+                    "ores": [
+                        {
+                            "ores": [
+                                "titanium",
+                                "spodumene",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "resin",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "plant_matter",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "ammonium",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.6
+                        },
+                        {
+                            "ores": [
+                                "clay",
+                                "iron",
+                                "astronium"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "coal",
+                                "iron",
+                                "coal"
+                            ],
+                            "thresh": 0.7
+                        },
+                        {
+                            "ores": [
+                                "quartz",
+                                "iron",
+                                "quartz"
+                            ],
+                            "thresh": 0.7
+                        }
+                    ]
+                }
+            },
+            {
+                "key": "Atrox",
+                "value": {
+                    "difficulty": 3,
                     "ores": [
                         {
                             "ores": [
