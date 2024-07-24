@@ -308,6 +308,44 @@
                     },
                     {
                         "first": [
+                            "processor_basic"
+                        ],
+                        "second": {
+                            "id": "repeater_delay",
+                            "display": 7077952,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "first": [
+                            "processor_basic"
+                        ],
+                        "second": {
+                            "id": "repeater_count",
+                            "display": 7077952,
+                            "slots": [],
+                            "size": 1,
+                            "dmg": 0,
+                            "cfg": 0,
+                            "sig": 0,
+                            "ptr": {
+                                "ptr_wrapper": {
+                                    "id": 0
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "first": [
                             "titanium_alloy"
                         ],
                         "second": {
