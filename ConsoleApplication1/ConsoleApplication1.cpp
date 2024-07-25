@@ -355,10 +355,11 @@ struct PlayerData {
 	shared_ptr<Item> item;
 	int x = 0, y = 0, z = 0;
 	string planet = "Sylva";
+	Update reprint;
 	vector<Update> updates;
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("x", x), make_nvp("y", y), make_nvp("z", z), make_nvp("planet", planet), make_nvp("updates", updates));
+		ar(make_nvp("x", x), make_nvp("y", y), make_nvp("z", z), make_nvp("planet", planet),make_nvp("reprint",reprint), make_nvp("updates", updates));
 	}
 } player;
 template<class T>
@@ -844,21 +845,7 @@ void processPlayer() {
 	if (key == '3')dmode = DABOVE;
 	if (key == '4')dmode = DDEPTH;
 
-	int px = player.x, py = player.y, pz = player.z;
-	if (!flight)player.z -= 1;
-	if (player.z < 0 || player.z>255 || planets[player.planet].getBlock(player.x, player.y, player.z) != nullptr) {
-		player.x = px;
-		player.y = py;
-		player.z = pz;// >:( error
-	}
-	else {
-		auto& pplayer = planets[player.planet].getBlock(player.x, player.y, player.z);
-		if (pplayer == player.item)return;
-		pplayer = player.item;
-		player.item = pplayer;
-		planets[player.planet].removeBlock(px, py, pz);
-		player.updates.push_back({ player.planet,player.x,player.y,player.z });
-	}
+	
 	for (int i = 0; i < playerSpeed; i++) {
 		int px = player.x, py = player.y, pz = player.z;
 		if (key == 'w')player.y -= 1;
@@ -872,6 +859,21 @@ void processPlayer() {
 			player.y = py;
 			player.z = pz;
 		}
+		auto& pplayer = planets[player.planet].getBlock(player.x, player.y, player.z);
+		if (pplayer == player.item)return;
+		pplayer = player.item;
+		player.item = pplayer;
+		planets[player.planet].removeBlock(px, py, pz);
+		player.updates.push_back({ player.planet,player.x,player.y,player.z });
+	}
+	int px = player.x, py = player.y, pz = player.z;
+	if (!flight&&key!='q')player.z -= 1;
+	if (player.z < 0 || player.z>255 || planets[player.planet].getBlock(player.x, player.y, player.z) != nullptr) {
+		player.x = px;
+		player.y = py;
+		player.z = pz;// >:( error
+	}
+	else {
 		auto& pplayer = planets[player.planet].getBlock(player.x, player.y, player.z);
 		if (pplayer == player.item)return;
 		pplayer = player.item;
@@ -898,6 +900,7 @@ void processUpdate(Update u) {
 	updatesDone.insert({ u.toString(),u.flags });
 	for (auto& a : block->slots) {
 		processUpdate(u, a.content);
+		if (block == nullptr)return;
 	}
 	processMisc(u, block, false);
 }
@@ -1012,6 +1015,10 @@ void shuttleItem(Update u, string planet) {
 	v.z++;
 	v.getBlock() = u.getBlock();
 	u.getBlock() = nullptr;
+	if (v.getBlock() == player.item) {
+		player.planet = v.planet;
+		player.z = v.z;
+	}
 }
 void processRocket(Update u, int eff) {
 	if (u.getBlock()->slots[0].content != nullptr) {
@@ -1032,6 +1039,12 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		processCanister(u, block);
 	}
 	else if (id == "platform_pacemaker") {
+		if (u.flags & 2 && !slotted) {
+			Update v = u;
+			v.z++;
+			v.flags = -1;
+			player.reprint = v;
+		}
 		processPacemaker(u, block, slotted);
 	}
 	else if (id == "platform_test_siren") {
@@ -1050,11 +1063,20 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->cfg %= 256;
 		block->display = (block->sig?block->cfg:0) << 16 | '@';
 	}
-	else if (id == "player_oxygen_tank") {//TODO:actually making an respawn system
+	else if (id == "player_oxygen_tank") {
 		if (oxygenDeducted)return;
 		oxygenDeducted = true;
 		block->dmg--;
-		if (block->dmg <= 0)throw "You died";
+		if (block->dmg <= 0) {
+			if(player.reprint.flags!=-1||player.reprint.getBlock()!=nullptr)throw "You died";
+			block->dmg = 90;
+			player.reprint.getBlock() = player.item;
+			planets[player.planet].removeBlock(player.x, player.y, player.z);
+			player.planet = player.reprint.planet;
+			player.x = player.reprint.x;
+			player.y = player.reprint.y;
+			player.z = player.reprint.z;
+		}
 	}
 	else if (block->sig & 1 && id == "portable_oxygenator") {
 		if (u.getBlock() == player.item&&!u.funnyPower()) {
@@ -1123,6 +1145,7 @@ void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 		Update t = queue[queue.size() - 1];//putting a reference here will anger the gods and blame it on the planet Sylva,making it dissapear.(not tested after the memory overhaul)
 		queue.pop_back();
 		if (find(network.begin(), network.end(), t) != network.end())continue;
+		if (t.getBlock() == nullptr)continue;
 		network.push_back(t);
 		if (t.getBlock()->id == "player_oxygen_tank" && block->slots[0].content!=nullptr)t.getBlock()->dmg = 90;
 		if (t.getBlock()->id == "platform_power_extenders") {
