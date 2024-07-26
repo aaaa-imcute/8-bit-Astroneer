@@ -154,7 +154,7 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	return s;
 }
 bool Item::isWorking() {
-	return printerRecipes.find(id) == printerRecipes.end() || dmg < 256;
+	return (printerRecipes.find(id) == printerRecipes.end() || dmg < 256)&&sig;
 };
 //no junk
 shared_ptr<Item> createResource(string type) {
@@ -489,7 +489,7 @@ vector<shared_ptr<Item>> destroyTerrain(Update u, int hardness, int range) {//VE
 		if (!(i.getBlock() == nullptr)) {
 			if (!i.getBlock()->id.ends_with("_placed"))continue;
 			network.push_back(i);
-			int remove = hardness - i.getBlock()->dmg;
+			int remove = i.getBlock()->dmg-hardness;
 			if (remove > 1)i.totalPower -= remove;
 			else i.totalPower -= 1;
 			if (i.totalPower < 0)continue;
@@ -549,10 +549,10 @@ void givePlayer(shared_ptr<Item> a) {
 	}
 	throw "Failed to throw item";
 }
-TerrainToolMods getTerrainToolMods() {//only the first special mod can function
+TerrainToolMods getTerrainToolMods() {//only the last special mod can function
 	TerrainToolMods mods;
 	shared_ptr<Item> tool = player.item->slots[2].content;
-	for (auto a : tool->slots) {
+	for (auto& a : tool->slots) {
 		if (a.content == nullptr)continue;
 		string id = a.content->id;
 		if (id.starts_with("mod_drill_")) {
@@ -560,6 +560,12 @@ TerrainToolMods getTerrainToolMods() {//only the first special mod can function
 		}
 		else if (id.starts_with("mod_range_")) {
 			mods.range += a.content->dmg;
+		}
+		else if (id == "mod_dynamite") {
+			mods.hardness = 6;
+			mods.range = 4;
+			a.content = nullptr;
+			mods.special = id;
 		}
 		else {
 			mods.special = id;
@@ -889,6 +895,7 @@ void processUpdate(Update u, shared_ptr<Item> block) {
 	if (u.flags & 2)block->sig = !block->sig;
 	for (auto& a : block->slots) {
 		processUpdate(u, a.content);
+		if (block == nullptr)return;
 	}
 	processMisc(u, block, u.getBlock()!=block);
 }
@@ -919,7 +926,7 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 		int cfg = block->cfg;
 		for (auto& i : printerRecipes[block->id]) {
 			if (key == i.first) {
-				if (cfg) {
+				if (cfg>0) {
 					cfg--;
 					continue;
 				}
@@ -938,6 +945,7 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 					if (block->slots[i].content!=nullptr&&block->slots[i].content->id != "soil"&&!block->slots[i].content->id.starts_with("resource_"))continue;
 					block->slots[i].content = nullptr;
 				}
+				break;
 			}
 		}
 	}
@@ -1050,7 +1058,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	else if (id == "platform_test_siren") {
 		block->cfg += 17;
 		block->cfg %= 256;
-		block->display = (block->sig ? block->cfg : 0) << 16 | '@';
+		block->display = (block->sig ? block->cfg : 255) << 16 | '@';
 	}
 	else if (block->sig&1&&!u.funnyPower()&&printerRecipes.find(id)!=printerRecipes.end()) {
 		block->dmg += u.lackPower(64/ thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[block->size]);
@@ -1061,7 +1069,7 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		if (u.funnyPower())return;
 		block->cfg += u.lackPower(17);
 		block->cfg %= 256;
-		block->display = (block->sig?block->cfg:0) << 16 | '@';
+		block->display = (block->sig?block->cfg:255) << 16 | '@';
 	}
 	else if (id == "player_oxygen_tank") {
 		if (oxygenDeducted)return;
@@ -1271,7 +1279,7 @@ int main() {
 			{1,nullptr},
 			{1,nullptr},
 			{1,make_shared<Item>(Item{ "platform_pacemaker",(255 << 16) | '@',{{2,nullptr,false,"oxygenator"}},1}),true},
-			{1,make_shared<Item>(Item{ "player_printer",(255 << 16) | '@',{{1,nullptr},{1,nullptr}},1 }),true},
+			{1,make_shared<Item>(Item{ "player_printer",(255 << 16) | '@',{{1,createResource("explosive_powder")},{1,nullptr}},1,0,0}),true},
 		},256 }, 0, 0, 0);
 		player.x = player.y = player.z = 0;
 		player.planet = "Sylva";
@@ -1287,6 +1295,7 @@ int main() {
 		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "test_power_source",(255 << 16) | '@',{},1 ,0,10}),false,"air",true}}, 2
 			}, 2, 4, 0);
 		planets["Sylva"].setBlock({ "battery_small",(255 << 16) | '@',{},1 ,0,1 }, 2, 5, 0);
+		player.updates.push_back({ "Sylva",0,0,0 });
 		player.updates.push_back({ "Sylva",1,1,0 });
 		saveGame();
 	}

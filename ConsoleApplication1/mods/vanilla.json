@@ -211,26 +211,6 @@
                     },
                     {
                         "first": [
-                            "zinc"
-                        ],
-                        "second": {
-                            "id": "mod_inhibit",
-                            "display": 14024741,
-                            "slots": [],
-                            "size": 1,
-                            "dmg": 0,
-                            "cfg": 0,
-                            "sig": 0,
-                            "ptr": {
-                                "ptr_wrapper": {
-                                    "id": 0
-                                }
-                            }
-                        },
-                        "codeNeeded": true
-                    },
-                    {
-                        "first": [
                             "ceramic"
                         ],
                         "second": {
@@ -303,8 +283,7 @@
                                     "id": 0
                                 }
                             }
-                        },
-                        "codeNeeded": true
+                        }
                     },
                     {
                         "first": [
