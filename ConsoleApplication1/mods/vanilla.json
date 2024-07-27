@@ -110,8 +110,7 @@
                                     "id": 0
                                 }
                             }
-                        },
-                        "codeNeeded": true
+                        }
                     },
                     {
                         "first": [
@@ -122,7 +121,7 @@
                             "display": 15007779,
                             "slots": [],
                             "size": 1,
-                            "dmg": 480,
+                            "dmg": 48,
                             "cfg": 0,
                             "sig": 0,
                             "ptr": {
@@ -130,8 +129,7 @@
                                     "id": 0
                                 }
                             }
-                        },
-                        "codeNeeded": true
+                        }
                     },
                     {
                         "first": [
@@ -353,8 +351,7 @@
                                     "id": 0
                                 }
                             }
-                        },
-                        "codeNeeded": true
+                        }
                     },
                     {
                         "first": [
@@ -752,8 +749,7 @@
                                     "id": 0
                                 }
                             }
-                        },
-                        "codeNeeded": true
+                        }
                     },
                     {
                         "first": [
@@ -1680,8 +1676,7 @@
                                     "id": 0
                                 }
                             }
-                        },
-                        "codeNeeded": true
+                        }
                     },
                     {
                         "first": [
@@ -2822,16 +2817,16 @@
             {
                 "key": "power_cell",
                 "value": [
+                    10,
                     0,
                     0,
-                    480,
-                    10
+                    0
                 ]
             },
             {
                 "key": "generator_small",
                 "value": [
-                    80,
+                    20,
                     0,
                     0,
                     0
@@ -2840,7 +2835,7 @@
             {
                 "key": "generator_medium",
                 "value": [
-                    360,
+                    90,
                     0,
                     0,
                     0
@@ -2983,6 +2978,11 @@
                 "comment": "color from somebody talking about solid hydrogen being light yellow.(sus)"
             },
             {
+                "key": "helium",
+                "value": 216,
+                "comment": "color form emission spectrum"
+            },
+            {
                 "key": "silicone",
                 "value": 80,
                 "comment": "made from quartz quartz and methane"
@@ -3104,6 +3104,12 @@
                             ],
                             "thresh": 0.7
                         }
+                    ],
+                    "atmosphere":[
+                        128,
+                        128,
+                        128,
+                        128
                     ]
                 }
             },
@@ -3168,6 +3174,12 @@
                             ],
                             "thresh": 0.7
                         }
+                    ],
+                    "atmosphere":[
+                        128,
+                        128,
+                        128,
+                        128
                     ]
                 }
             },
@@ -3232,6 +3244,12 @@
                             ],
                             "thresh": 0.7
                         }
+                    ],
+                    "atmosphere":[
+                        128,
+                        128,
+                        128,
+                        128
                     ]
                 }
             },
@@ -3296,6 +3314,12 @@
                             ],
                             "thresh": 0.7
                         }
+                    ],
+                    "atmosphere":[
+                        256,
+                        256,
+                        256,
+                        0
                     ]
                 }
             },
@@ -3360,6 +3384,12 @@
                             ],
                             "thresh": 0.7
                         }
+                    ],
+                    "atmosphere":[
+                        256,
+                        256,
+                        0,
+                        0
                     ]
                 }
             },
@@ -3416,8 +3446,24 @@
                             ],
                             "thresh": 0.7
                         }
+                    ],
+                    "atmosphere":[
+                        8,
+                        0,
+                        0,
+                        0
                     ]
                 }
+            }
+        ],
+        "consumers":[
+            {
+                "key":"generator_small",
+                "value":32
+            },
+            {
+                "key":"generator_medium",
+                "value":128
             }
         ]
     }

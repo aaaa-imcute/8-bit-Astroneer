@@ -116,9 +116,10 @@ struct OreParams {
 struct PlanetMod {
 	int difficulty;
 	vector<OreParams> ores;
+	vector<int> atmosphere;
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("difficulty", difficulty), make_nvp("ores", ores));
+		ar(make_nvp("difficulty", difficulty), make_nvp("ores", ores), make_nvp("atmosphere", atmosphere));
 	}
 };
 struct TerrainToolMods {
@@ -131,6 +132,7 @@ unordered_map<string, vector<int>> powerMap;
 unordered_map<string, unsigned char> resourceColors;
 unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes;
 unordered_map<string, PlanetMod> planetSettings;
+unordered_map<string, int> consumers;
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -154,7 +156,8 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	return s;
 }
 bool Item::isWorking() {
-	return (printerRecipes.find(id) == printerRecipes.end() || dmg < 256)&&sig;
+	bool a = printerRecipes.find(id) == printerRecipes.end(), b = consumers.find(id) == consumers.end();
+	return (a&&b || b&&dmg < 256||a&&dmg>0)&&sig;
 };
 //no junk
 shared_ptr<Item> createResource(string type) {
@@ -488,11 +491,11 @@ vector<shared_ptr<Item>> destroyTerrain(Update u, int hardness, int range) {//VE
 		if (find(network.begin(), network.end(), i) != network.end())continue;
 		if (!(i.getBlock() == nullptr)) {
 			if (!i.getBlock()->id.ends_with("_placed"))continue;
-			network.push_back(i);
 			int remove = i.getBlock()->dmg-hardness;
 			if (remove > 1)i.totalPower -= remove;
 			else i.totalPower -= 1;
 			if (i.totalPower < 0)continue;
+			network.push_back(i);
 		}
 		else {
 			network.push_back(i);
@@ -573,7 +576,7 @@ TerrainToolMods getTerrainToolMods() {//only the last special mod can function
 	}
 	return mods;
 }
-void processUpdate(Update u,shared_ptr<Item> block);
+void processUpdate(Update u,shared_ptr<Item>& block);
 void processUpdate(Update u);
 void processCursor() {
 	vector<string> dirs = { "platform_power_extenders","platform_auto_arm" ,"platform_long_auto_arm" ,"platform_fast_auto_arm" };
@@ -889,8 +892,8 @@ void processPlayer() {
 	}
 }
 void processPacemaker(Update u, shared_ptr<Item> block, bool slotted);
-void processMisc(Update u, shared_ptr<Item> block, bool slotted);
-void processUpdate(Update u, shared_ptr<Item> block) {
+void processMisc(Update u, shared_ptr<Item>& block, bool slotted);
+void processUpdate(Update u, shared_ptr<Item>& block) {
 	if (block == nullptr)return;
 	if (u.flags & 2)block->sig = !block->sig;
 	for (auto& a : block->slots) {
@@ -1041,7 +1044,8 @@ void processRocket(Update u, int eff) {
 		}
 	}
 }
-void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
+vector<string> gasDensities = {"hydrogen","helium","methane","propane","oleum"};
+void processMisc(Update u, shared_ptr<Item>& block, bool slotted) {
 	string id = block->id;
 	if (id.starts_with("canister")) {
 		processCanister(u, block);
@@ -1064,6 +1068,14 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->dmg += u.lackPower(64/ thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[block->size]);
 		if (block->dmg > 256)block->dmg = 256;
 		processPrinter(u, block);
+	}
+	else if (block->sig & 1 && !u.funnyPower() && consumers.find(id) != consumers.end()) {
+		block->dmg--;
+		if (block->dmg <= 0&& block->slots[0].content!=nullptr) {
+			block->dmg = consumers[id];
+			block->slots[0].content = nullptr;
+		}
+		if (block->dmg < 0)block->dmg = 0;
 	}
 	else if (id == "test_power_siren") {
 		if (u.funnyPower())return;
@@ -1141,6 +1153,42 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 	else if (id == "platform_rocket_large") {
 		processRocket(u, 8);
 	}
+	else if (id == "power_cell") {
+		block->dmg--;
+		if (block->dmg == 0)block = nullptr;//not sure if works
+	}
+	else if (id == "jetpack_hydrazine") {
+		if (block != player.item->slots[4].content)return;//the other aux slot does not count
+		if (!block->sig) {
+			playerSpeed = 1+(player.item->slots[3].content==nullptr);
+			flight = false;
+			return;
+		}
+		block->dmg--;
+		if (block->dmg <= 0&& block->slots[0].content!=nullptr) {
+			block->dmg = 128;
+			block->slots[0].content = nullptr;
+		}
+		if (block->dmg < 0)block->dmg = 0;
+		if (block->dmg > 0) {
+			playerSpeed = 4;
+			flight = true;
+		}
+	}
+	else if (id == "atmospheric_condensor") {
+		block->dmg += u.lackPower(32);
+		if (block->dmg > 256)block->dmg = 256;
+		if (block->dmg == 256) {
+			if (block->slots[0].content != nullptr)return;
+			block->dmg = 0;
+			int j = 0;
+			for (int i : planetSettings[u.planet].atmosphere) {
+				if (u.z > i)break;
+				j++;
+			}
+			block->slots[0].content = createResource(gasDensities[j]);
+		}
+	}
 }
 void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 	if (u.flags & 1)return;
@@ -1209,9 +1257,10 @@ struct Mod {
 	unordered_map<string, vector<int>> power;
 	unordered_map<string, unsigned char> resourceColors;
 	unordered_map<string, PlanetMod> planets;
+	unordered_map<string, int> consumers;
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("description", description), make_nvp("recipes", recipes), make_nvp("power", power), make_nvp("resourceColors", resourceColors), make_nvp("planets", planets));
+		ar(make_nvp("description", description), make_nvp("recipes", recipes), make_nvp("power", power), make_nvp("resourceColors", resourceColors), make_nvp("planets", planets), make_nvp("consumers", consumers));
 	}
 };
 void loadMods() {
