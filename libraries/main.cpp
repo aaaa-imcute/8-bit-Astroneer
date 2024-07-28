@@ -1,35 +1,107 @@
-#ifdef _WIN32
-#define _WIN32_WINNT 0x0500
-#include <Windows.h>
-#include <conio.h>
-#else
-#include <termios.h>
-#endif
-#include <iostream>
-#include <vector>
-#include <cstdint>
-#include <unordered_map>
-#include <memory>
-#include <string>
-#include<algorithm>
-#include<cstring>
-#include<fstream>
-#include<filesystem>
-#include<iterator>
-#include"cereal/archives/portable_binary.hpp"
-#include"cereal/archives/json.hpp"
-#include "cereal/types/memory.hpp"
-#include "cereal/types/vector.hpp"
-#include "cereal/types/string.hpp"
-#include "cereal/types/unordered_map.hpp"
-#include "cereal/types/utility.hpp"
-#include "PerlinNoise.hpp"
-using uint = unsigned int;
-using cereal::make_nvp;
-constexpr auto W = 100;
-constexpr auto H = 50;
-constexpr auto MOD_DEV = 0;
-using namespace std;
+#pragma once
+#include"main.hpp"
+//#ifdef _WIN32
+//#define _WIN32_WINNT 0x0500
+//#include <Windows.h>
+//#include <conio.h>
+//#else
+//#include <termios.h>
+//#endif
+//#include <iostream>
+//#include <vector>
+//#include <cstdint>
+//#include <unordered_map>
+//#include <memory>
+//#include <string>
+//#include<algorithm>
+//#include<cstring>
+//#include<fstream>
+//#include<filesystem>
+//#include<iterator>
+//#include"cereal/archives/portable_binary.hpp"
+//#include"cereal/archives/json.hpp"
+//#include "cereal/types/memory.hpp"
+//#include "cereal/types/vector.hpp"
+//#include "cereal/types/string.hpp"
+//#include "cereal/types/unordered_map.hpp"
+//#include "cereal/types/utility.hpp"
+//#include "PerlinNoise.hpp"
+//using uint = unsigned int;
+//using cereal::make_nvp;
+//constexpr auto W = 100;
+//constexpr auto H = 50;
+//constexpr auto MOD_DEV = 0;
+//using namespace std;
+//struct PowerStatus;
+//struct Slot;
+//struct Update;
+//struct Item {
+//	string id;
+//	uint display = 128 << 16 | '?';//oops
+//	vector<Slot> slots;
+//	int size = -1;//oops
+//	int dmg = 0;
+//	int cfg = 0;
+//	int sig = 0;
+//	shared_ptr<Item> ptr = nullptr;
+//	PowerStatus getPower(shared_ptr<Item> that);
+//	bool isWorking();
+//	Update getFacing(Update u, int dist);
+//	vector<int> _getFacing();
+//	template<class Archive>
+//	void serialize(Archive& ar) {
+//		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg), make_nvp("sig", sig));
+//	}
+//};
+//struct Slot {
+//	int size = -1;//oops
+//	shared_ptr<Item> content;
+//	bool locked = false;
+//	string sorter = "air";
+//	bool uni = false;
+//	char qTrig = 0;
+//	bool isFree() const {
+//		return content == nullptr;
+//	}
+//	template<class Archive>
+//	void serialize(Archive& ar) {
+//		ar(make_nvp("size", size), make_nvp("content", content), make_nvp("locked", locked), make_nvp("sorter", sorter), make_nvp("uni", uni), make_nvp("qTrig", qTrig));
+//	}
+//};
+//struct BatteryStatus {
+//	int storage;
+//	int rate;
+//	shared_ptr<Item> item;
+//	int emptiness = 0;
+//};
+//struct PowerStatus {
+//	int used = 0;
+//	int produced = 0;
+//	vector<BatteryStatus> stored = {};
+//};
+//struct OreParams {
+//	vector<string> ores;
+//	double thresh;
+//	template<class Archive>
+//	void serialize(Archive& ar) {
+//		ar(make_nvp("ores", ores), make_nvp("thresh", thresh));
+//	}
+//};
+//struct PlanetMod {
+//	int difficulty;
+//	vector<OreParams> ores;
+//	vector<int> atmosphere;
+//	template<class Archive>
+//	void serialize(Archive& ar) {
+//		ar(make_nvp("difficulty", difficulty), make_nvp("ores", ores), make_nvp("atmosphere", atmosphere));
+//	}
+//};
+//struct TerrainToolMods {
+//	int hardness = 0;
+//	int range = 1;
+//	//special effects?
+//	string special = "";
+//};
 vector<vector<uint> > buf(H, vector<uint>(W, (32 << 16) | ' '));
 char key = 0;
 void init() {
@@ -56,83 +128,7 @@ void init() {
 	cout.flush();
 	_getch();//return value ignore.
 }
-const siv::PerlinNoise::seed_type noiseSeed = 123456u;
-const siv::PerlinNoise perlin{ noiseSeed };
-struct PowerStatus;
-struct Slot;
-struct Update;
-struct Item {
-	string id;
-	uint display = 128 << 16 | '?';//oops
-	vector<Slot> slots;
-	int size = -1;//oops
-	int dmg = 0;
-	int cfg = 0;
-	int sig = 0;
-	shared_ptr<Item> ptr = nullptr;
-	PowerStatus getPower(shared_ptr<Item> that);
-	bool isWorking();
-	Update getFacing(Update u, int dist);
-	vector<int> _getFacing();
-	template<class Archive>
-	void serialize(Archive& ar) {
-		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg),make_nvp("sig",sig));
-	}
-};
-struct Slot {
-	int size = -1;//oops
-	shared_ptr<Item> content;
-	bool locked = false;
-	string sorter = "air";
-	bool uni = false;
-	char qTrig = 0;
-	bool isFree() const {
-		return content == nullptr;
-	}
-	template<class Archive>
-	void serialize(Archive& ar) {
-		ar(make_nvp("size", size), make_nvp("content", content), make_nvp("locked", locked), make_nvp("sorter", sorter), make_nvp("uni", uni), make_nvp("qTrig", qTrig));
-	}
-};
-struct BatteryStatus {
-	int storage;
-	int rate;
-	shared_ptr<Item> item;
-	int emptiness = 0;
-};
-struct PowerStatus {
-	int used = 0;
-	int produced = 0;
-	vector<BatteryStatus> stored = {};
-};
-struct OreParams {
-	vector<string> ores;
-	double thresh;
-	template<class Archive>
-	void serialize(Archive& ar) {
-		ar(make_nvp("ores", ores), make_nvp("thresh", thresh));
-	}
-};
-struct PlanetMod {
-	int difficulty;
-	vector<OreParams> ores;
-	vector<int> atmosphere;
-	template<class Archive>
-	void serialize(Archive& ar) {
-		ar(make_nvp("difficulty", difficulty), make_nvp("ores", ores), make_nvp("atmosphere", atmosphere));
-	}
-};
-struct TerrainToolMods {
-	int hardness = 0;
-	int range = 1;
-	//special effects?
-	string special = "";
-};
-unordered_map<string, vector<int>> powerMap;
-unordered_map<string, unsigned char> resourceColors;
-unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes;
-unordered_map<string, PlanetMod> planetSettings;
-unordered_map<string, int> consumers;
+
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -160,185 +156,6 @@ bool Item::isWorking() {
 	return (a&&b || b&&dmg < 256||a&&dmg>0)&&sig;
 };
 //no junk
-shared_ptr<Item> createResource(string type) {
-	uint a = resourceColors[type] << 16 | '*';
-	return make_shared<Item>(Item{ "resource_" + type,a,{},1,255 });
-}
-shared_ptr<Item> createNull() {
-	return nullptr;
-}
-shared_ptr<Item> createItem(Item i) {
-	return make_shared<Item>(i);
-}
-vector<string> planetNames = { "Sylva","Desolo","Calidor","Vesania","Novus","Atrox" };
-vector<vector<vector<shared_ptr<Item> > > > createChunk(string planet, int x, int y) {
-	vector<vector<vector<shared_ptr<Item> > > > a;
-	a.resize(256);
-	for (int i = 0; i < 256; i++) {
-		a[i].resize(16);
-		for (int j = 0; j < 16; j++) {
-			a[i][j].resize(16);
-		}
-	}
-	int planetDiff = planetSettings[planet].difficulty;
-	vector<vector<vector<int>>> heightmap(12);
-	for (int i = 0; i < 12; i++) {
-		heightmap[i].resize(16);
-		for (int j = 0; j < 16; j++) {
-			heightmap[i][j].resize(16);
-			for (int k = 0; k < 16; k++) {
-				heightmap[i][j][k] = int(4 * perlin.noise3D((x * 16 + j) * 0.1, (y * 16 + k) * 0.1, i+256*(find(planetNames.begin(),planetNames.end(),planet)-planetNames.begin())) + 10 * i);
-			}
-		}
-	}
-	vector <OreParams > ores = planetSettings[planet].ores;//in decreasing priority
-	for (int i = 0; i < 6; i += 2) {
-		for (int j = 0; j < 16; j++) {
-			for (int k = 0; k < 16; k++) {
-				for (int l = heightmap[i][j][k]; l < heightmap[i + 1][j][k]; l++) {
-					if (l < 0 || l>255)continue;
-					int hardness = 3 - i / 2 + planetDiff;
-					for (int o = 0; o < ores.size(); o++) {
-						if (perlin.noise3D((x * 16 + j) * 0.2, (y * 16 + k) * 0.2, (o * 256 * 256 + 256 * (find(planetNames.begin(), planetNames.end(), planet) - planetNames.begin()) + l) * 0.2) > ores[o].thresh) {//dont add more than 256 planets.
-							string id = ores[o].ores[hardness - planetDiff-1];
-							a[l][k][j] = createItem({id + "_placed",uint(resourceColors[id]) << 16 | '-',{},256,hardness});
-							break;
-						}
-					}
-					if(a[l][k][j]==nullptr)a[l][k][j] = createItem({"soil_placed",255 << 16 | '-',{},256,hardness });
-				}
-			}
-		}
-	}
-	return a;
-}
-Item _nilItem;
-shared_ptr<Item> nilItem = make_shared<Item>(_nilItem);
-struct Planet {
-	string name;
-	unordered_map<string, vector<vector<vector<shared_ptr<Item> > > > > chunks;
-	vector<vector<vector<shared_ptr<Item> > > >& getChunk(int x, int y) {
-		string cid = to_string(x) + "," + to_string(y);
-		auto a = chunks.find(cid);
-		if (a == chunks.end()) {
-			ifstream f;
-			f.open((".\\save\\world\\chunk_" + name + "_" + cid + ".bin").c_str(), ios::binary);
-			if (f.good()) {
-				cereal::PortableBinaryInputArchive ain(f);
-				vector<vector<vector<shared_ptr<Item> > > > chunk;
-				ain(chunk);
-				chunks.insert({ cid,chunk });
-				return chunks[cid];
-			}
-			chunks.insert({ cid,createChunk(name, x, y) });
-			return chunks[cid];
-		}
-		else {
-			return a->second;
-		}
-	}
-	shared_ptr<Item>& getBlock(int x, int y, int z) {
-		if (z < 0 || z>255) {
-			return nilItem;
-		}
-		return getChunk(x >> 4, y >> 4)[z][y & 15][x & 15];
-	}
-	shared_ptr<Item>& setBlock(Item i, int x, int y, int z) {
-		if (z < 0 || z>255) {
-			return nilItem;
-		}
-		(getChunk(x >> 4, y >> 4))[z][y & 15][x & 15] = make_shared<Item>(i);
-		return getChunk(x >> 4, y >> 4)[z][y & 15][x & 15];
-	}
-	void removeBlock(int x, int y, int z) {
-		if (z < 0 || z>255)return;
-		getChunk(x >> 4, y >> 4)[z][y & 15][x & 15] = nullptr;
-	}
-};
-unordered_map<string, Planet> planets;
-struct Update {
-	string planet = "lulz";
-	int x = 420;
-	int y = 69;
-	int z = 1337;//if you see those funny numbers its because you made a mistake that made uninitialized update structs which vs told me to initialize values for.
-	int totalPower = 80;
-	int usedPower = 14;
-	int flags = 0;
-	static Update fromOther(Update u, int x, int y, int z) {
-		u.x = x;
-		u.y = y;
-		u.z = z;
-		return u;
-	}
-	bool operator==(Update& o) const {
-		return (toString() == o.toString());
-	}
-	bool operator<(Update& o) const {
-		return toString() < o.toString();
-	}
-	string toString() const {
-		return "Update_" + planet + "_" + to_string(x) + "_" + to_string(y) + "_" + to_string(z) + "_" + to_string(totalPower) + "_" + to_string(usedPower);
-	}
-	shared_ptr<Item>& getBlock() const {
-		return planets[planet].getBlock(x, y, z);
-	}
-	vector<Update> neighbors() {
-		return {
-			fromOther(*this,x + 1, y, z),
-			fromOther(*this,x - 1, y, z),
-			fromOther(*this,x, y + 1, z),
-			fromOther(*this,x, y - 1, z),
-			fromOther(*this,x, y, z + 1),
-			fromOther(*this,x, y, z - 1),
-		};
-	}
-	int lackPower(int x) const {
-		if (usedPower == 0)return x;
-		if (totalPower > usedPower)return x;
-		return x * totalPower / usedPower;//do not switch order
-	}
-	bool funnyPower() const {
-		return !(flags & 1);//no more funny power
-	}
-	template<class Archive>
-	void serialize(Archive& ar) {
-		ar(make_nvp("planet", planet), make_nvp("x", x), make_nvp("y", y), make_nvp("z", z), make_nvp("totalPower", totalPower), make_nvp("usedPower", usedPower));
-	}
-};
-vector<Update> _updates;
-unordered_map<string, int> updatesDone;
-vector<int> Item::_getFacing() {
-	switch (cfg) {
-	case 0:
-		display = (display >> 16) << 16 | '<';
-		return { -1,0,0 };
-	case 1:
-		display = (display >> 16) << 16 | '>';
-		return { 1,0,0 };
-	case 2:
-		display = (display >> 16) << 16 | '^';
-		return { 0,-1,0 };
-	case 3:
-		display = (display >> 16) << 16 | 'v';
-		return { 0,1,0 };
-	case 4:
-		display = (display >> 16) << 16 | 'x';
-		return { 0,0,-1 };
-	case 5:
-		display = (display >> 16) << 16 | '.';
-		return { 0,0,1 };
-	}
-}
-Update Item::getFacing(Update u,int dist){
-	vector<int> f = _getFacing();
-	f[0] *= dist;
-	f[1] *= dist;
-	f[2] *= dist;
-	u.x += f[0];
-	u.y += f[1];
-	u.z += f[2];
-	return u;
-}
 int cursorAt = 0;
 int cursorSel = 0;
 int cursorX = 0, cursorY = 0;
@@ -348,23 +165,6 @@ int playerSpeed = 2;
 bool flight = true;
 string cursorObjplanet;
 shared_ptr<Item> cursorObj;
-enum DisplayMode {
-	DNORM,
-	DUNDER,
-	DDEPTH,
-	DABOVE
-} dmode;
-struct PlayerData {
-	shared_ptr<Item> item;
-	int x = 0, y = 0, z = 0;
-	string planet = "Sylva";
-	Update reprint;
-	vector<Update> updates;
-	template<class Archive>
-	void serialize(Archive& ar) {
-		ar(make_nvp("x", x), make_nvp("y", y), make_nvp("z", z), make_nvp("planet", planet),make_nvp("reprint",reprint), make_nvp("updates", updates));
-	}
-} player;
 template<class T>
 void saveFile(string name, T& contents) {
 	ofstream f;
@@ -1300,57 +1100,19 @@ void generateTemplateDatapack() {
 	//cereal::JSONOutputArchive aout(f);
 	//aout(make_nvp("mod", m));
 }
-int main() {
-	init();
-	//if (MOD_DEV)generateTemplateDatapack();
-	loadMods();
-	planets["Sylva"] = { "Sylva" };
-	cursorObj = nullptr;
+bool initSave() {
 	if (!filesystem::is_directory(".\\save\\") || !filesystem::is_directory(".\\save\\world\\")) {
 		filesystem::create_directory(".\\save\\");
 		filesystem::create_directory(".\\save\\world\\");
-		for (int i = 0; i < 256; i++) {
-			planets["Sylva"].removeBlock(0, 0, i);
-		}
-		player.item = planets["Sylva"].setBlock({ "player",(32 << 16) | '@',{
-			{1,make_shared<Item>(Item{ "player_oxygen_tank",(90 << 16) | '@',{},1,90 }),true},
-			{1,make_shared<Item>(Item{ "player_battery",(100 << 16) | '@',{},1,100 }),true},
-			{1,make_shared<Item>(Item{ "player_terrain_tool",(8 << 16) | '@',{{1,nullptr},{1,nullptr},{1,nullptr}},1,0,0}),true},
-			{4,nullptr,false,"air",true},
-			{1,nullptr,false,"air",false,'c'},
-			{1,nullptr,false,"air",false,'v'},
-			{1,make_shared<Item>(Item{ "platform_printer_small",(255 << 16) | '@',{{1,createResource("graphite")},{1,createResource("iron")},{2,nullptr}},1 ,0,0})},
-			{1,createResource("exo_alloy")},
-			{1,nullptr},
-			{1,nullptr},
-			{1,nullptr},
-			{1,nullptr},
-			{1,nullptr},
-			{1,nullptr},
-			{1,make_shared<Item>(Item{ "platform_pacemaker",(255 << 16) | '@',{{2,nullptr,false,"oxygenator"}},1}),true},
-			{1,make_shared<Item>(Item{ "player_printer",(255 << 16) | '@',{{1,createResource("explosive_powder")},{1,nullptr}},1,0,0}),true},
-		},256 }, 0, 0, 0);
-		player.x = player.y = player.z = 0;
-		player.planet = "Sylva";
-		planets["Sylva"].setBlock({ "test_l_weighted_cube",(255 << 16) | '#',{},3 }, 0, 1, 0);
-		planets["Sylva"].setBlock({ "platform_pacemaker",(255 << 16) | '@',{},1 }, 1, 1, 0);
-		planets["Sylva"].setBlock({ "platform_test_siren",(0 << 16) | '@',{},1 }, 2, 1, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "canister",16711715,{{1,nullptr},{1,nullptr}},2 ,0,32}),false,"air",true}}, 2 }, 1, 2, 0);
-		
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "canister_resin",16711715,{{1,nullptr},{1,nullptr}},2 ,3,32}),false,"air",true}}, 2
-			}, 1, 4, 0);
-		planets["Sylva"].setBlock({ "platform_power_extenders",15007779,{},1 }, 1, 6, 0);
-		planets["Sylva"].setBlock({ "test_power_void",(255 << 16) | '@',{},1 ,0,10 }, 1, 7, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "test_power_source",(255 << 16) | '@',{},1 ,0,10}),false,"air",true}}, 2
-			}, 2, 4, 0);
-		planets["Sylva"].setBlock({ "battery_small",(255 << 16) | '@',{},1 ,0,1 }, 2, 5, 0);
-		player.updates.push_back({ "Sylva",0,0,0 });
-		player.updates.push_back({ "Sylva",1,1,0 });
 		saveGame();
+		return true;
 	}
 	else {
 		loadGame();
+		return false;
 	}
+}
+void eventLoop() {
 	while (1) {
 		for (int i = 0; i < W; i++) {
 			for (int j = 0; j < H; j++) {
@@ -1390,5 +1152,4 @@ int main() {
 		cout.flush();
 		key = _getch();
 	}
-	return 0;
 }
