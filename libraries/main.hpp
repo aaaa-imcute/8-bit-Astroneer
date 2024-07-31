@@ -203,9 +203,10 @@ struct OreParams {
 struct PlanetMod {
 	int difficulty;
 	vector<OreParams> ores;
+	vector<int> atmosphere;
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("difficulty", difficulty), make_nvp("ores", ores));
+		ar(make_nvp("difficulty", difficulty), make_nvp("ores", ores), make_nvp("atmosphere", atmosphere));
 	}
 };
 struct TerrainToolMods {
@@ -218,6 +219,7 @@ unordered_map<string, vector<int>> powerMap;
 unordered_map<string, unsigned char> resourceColors;
 unordered_map<string, vector<pair<vector<string>, Item> > > printerRecipes;
 unordered_map<string, PlanetMod> planetSettings;
+unordered_map<string, int> consumers;
 PowerStatus Item::getPower(shared_ptr<Item> that) {
 	PowerStatus s;
 	if (id == "test_power_source") {
@@ -241,7 +243,8 @@ PowerStatus Item::getPower(shared_ptr<Item> that) {
 	return s;
 }
 bool Item::isWorking() {
-	return (printerRecipes.find(id) == printerRecipes.end() || dmg < 256) && sig;
+	bool a = printerRecipes.find(id) == printerRecipes.end(), b = consumers.find(id) == consumers.end();
+	return (a && b || b && dmg < 256 || a && dmg>0) && sig;
 };
 shared_ptr<Item> createResource(string type) {
 	uint a = resourceColors[type] << 16 | '*';
@@ -575,11 +578,11 @@ vector<shared_ptr<Item>> destroyTerrain(Update u, int hardness, int range) {//VE
 		if (find(network.begin(), network.end(), i) != network.end())continue;
 		if (!(i.getBlock() == nullptr)) {
 			if (!i.getBlock()->id.ends_with("_placed"))continue;
-			network.push_back(i);
 			int remove = i.getBlock()->dmg - hardness;
 			if (remove > 1)i.totalPower -= remove;
 			else i.totalPower -= 1;
 			if (i.totalPower < 0)continue;
+			network.push_back(i);
 		}
 		else {
 			network.push_back(i);
@@ -660,7 +663,7 @@ TerrainToolMods getTerrainToolMods() {//only the last special mod can function
 	}
 	return mods;
 }
-void processUpdate(Update u, shared_ptr<Item> block);
+void processUpdate(Update u, shared_ptr<Item>& block);
 void processUpdate(Update u);
 void processCursor() {
 	vector<string> dirs = { "platform_power_extenders","platform_auto_arm" ,"platform_long_auto_arm" ,"platform_fast_auto_arm" };
@@ -931,8 +934,9 @@ void processCursor() {
 		break;
 	}
 }
+vector<string> printerOrder = { "player_printer","platform_printer_small","printer_medium","printer_large" };
 void processPlayer() {
-	if (!flight)oxygenDeducted = false;
+	oxygenDeducted = false;
 	if (key == '1')dmode = DNORM;
 	if (key == '2')dmode = DUNDER;
 	if (key == '3')dmode = DABOVE;
@@ -976,9 +980,13 @@ void processPlayer() {
 	}
 }
 void processPacemaker(Update u, shared_ptr<Item> block, bool slotted);
-void processMisc(Update u, shared_ptr<Item> block, bool slotted);
-void processUpdate(Update u, shared_ptr<Item> block) {
+void processMisc(Update u, shared_ptr<Item>& block, bool slotted);
+void processUpdate(Update u, shared_ptr<Item>& block) {
 	if (block == nullptr)return;
+	if (block->id == "truncated_pentachoron") {
+		processMisc(u, block, u.getBlock() != block);
+		return;
+	}
 	if (u.flags & 2)block->sig = !block->sig;
 	for (auto& a : block->slots) {
 		processUpdate(u, a.content);
@@ -989,6 +997,10 @@ void processUpdate(Update u, shared_ptr<Item> block) {
 void processUpdate(Update u) {
 	auto& block = u.getBlock();
 	if (block == nullptr)return;
+	if (block->id == "truncated_pentachoron") {
+		processMisc(u, block, false);
+		return;
+	}
 	if (u.flags & 2) block->sig = !block->sig;
 	if (!(u.flags & 2) && updatesDone.contains(u.toString()) && (updatesDone[u.toString()] & u.flags) == u.flags)return;
 	updatesDone.insert({ u.toString(),u.flags });
@@ -997,6 +1009,29 @@ void processUpdate(Update u) {
 		if (block == nullptr)return;
 	}
 	processMisc(u, block, false);
+}
+shared_ptr<Item> resourceShortHand(shared_ptr<Item> a) {
+	if (a->id.starts_with("_")) {
+		a->display = a->display << 16 | '*';
+		a->size = 1;
+		a->dmg = 255;
+		a->cfg = 0;
+		a->slots.clear();
+		a->id = "resource" + a->id;
+	}
+	return a;
+}
+shared_ptr<Item> printRecipe(string printer,vector<string> key,int cfg) {
+	for (auto& i : printerRecipes[printer]) {
+		if (key == i.first) {
+			if (cfg > 0) {
+				cfg--;
+				continue;
+			}
+			return resourceShortHand(createItem(i.second));
+		}
+	}
+	throw "invalid print";
 }
 void processPrinter(Update u, shared_ptr<Item> block) {
 	if (block->dmg >= 255) {
@@ -1010,30 +1045,15 @@ void processPrinter(Update u, shared_ptr<Item> block) {
 			if (!block->slots[i].content->id.starts_with("resource_"))continue;
 			key.push_back(block->slots[i].content->id.substr(string("resource_").size()));
 		}
-		int cfg = block->cfg;
-		for (auto& i : printerRecipes[block->id]) {
-			if (key == i.first) {
-				if (cfg > 0) {
-					cfg--;
-					continue;
-				}
-				block->slots[block->slots.size() - 1].content = createItem(i.second);
-				auto& a = block->slots[block->slots.size() - 1].content;
-				if (a->id.starts_with("_")) {
-					a->display = a->display << 16 | '*';
-					a->size = 1;
-					a->dmg = 255;
-					a->cfg = 0;
-					a->slots.clear();
-					a->id = "resource" + a->id;
-				}
-				block->dmg = 0;
-				for (int i = 0; i < block->slots.size() - 1; i++) {
-					if (block->slots[i].content != nullptr && block->slots[i].content->id != "soil" && !block->slots[i].content->id.starts_with("resource_"))continue;
-					block->slots[i].content = nullptr;
-				}
-				break;
+		try {
+			block->slots[block->slots.size()-1].content=printRecipe(block->id, key, block->cfg);
+			block->dmg = 0;
+			for (int i = 0; i < block->slots.size() - 1; i++) {
+				if (block->slots[i].content != nullptr && block->slots[i].content->id != "soil" && !block->slots[i].content->id.starts_with("resource_"))continue;
+				block->slots[i].content = nullptr;
 			}
+		}catch(const char* e) {
+
 		}
 	}
 }
@@ -1129,7 +1149,8 @@ void processRocket(Update u, int eff) {
 		}
 	}
 }
-void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
+vector<string> gasDensities = { "hydrogen","helium","methane","propane","oleum" };
+void processMisc(Update u, shared_ptr<Item>& block, bool slotted) {
 	string id = block->id;
 	if (id.starts_with("canister")) {
 		processCanister(u, block);
@@ -1152,6 +1173,14 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		block->dmg += u.lackPower(64 / thisArrayExistsForTheSoleReasonThatVSDoesNotWantMeToUseThePowFunctionForThisBecauseItIsALossyConversion[block->size]);
 		if (block->dmg > 256)block->dmg = 256;
 		processPrinter(u, block);
+	}
+	else if (block->sig & 1 && !u.funnyPower() && consumers.find(id) != consumers.end()) {
+		block->dmg--;
+		if (block->dmg <= 0 && block->slots[0].content != nullptr) {
+			block->dmg = consumers[id];
+			block->slots[0].content = nullptr;
+		}
+		if (block->dmg < 0)block->dmg = 0;
 	}
 	else if (id == "test_power_siren") {
 		if (u.funnyPower())return;
@@ -1224,10 +1253,78 @@ void processMisc(Update u, shared_ptr<Item> block, bool slotted) {
 		}
 	}
 	else if (id == "platform_rocket_small") {
-		processRocket(u, 4);
+		if(!slotted)processRocket(u, 4);
 	}
 	else if (id == "platform_rocket_large") {
-		processRocket(u, 8);
+		if (!slotted)processRocket(u, 8);
+	}
+	else if (id == "power_cell") {
+		block->dmg--;
+		if (block->dmg == 0)block = nullptr;//not sure if works
+	}
+	else if (id == "jetpack_hydrazine") {
+		if (block != player.item->slots[4].content)return;//the other aux slot does not count
+		if (!block->sig) {
+			playerSpeed = 1 + (player.item->slots[3].content == nullptr);
+			flight = false;
+			return;
+		}
+		block->dmg--;
+		if (block->dmg <= 0 && block->slots[0].content != nullptr) {
+			block->dmg = 128;
+			block->slots[0].content = nullptr;
+		}
+		if (block->dmg < 0)block->dmg = 0;
+		if (block->dmg > 0) {
+			playerSpeed = 4;
+			flight = true;
+		}
+	}
+	else if (id == "atmospheric_condensor") {
+		block->dmg += u.lackPower(32);
+		if (block->dmg > 256)block->dmg = 256;
+		if (block->dmg == 256) {
+			if (block->slots[0].content != nullptr)return;
+			block->dmg = 0;
+			int j = 0;
+			for (int i : planetSettings[u.planet].atmosphere) {
+				if (u.z > i)break;
+				j++;
+			}
+			block->slots[0].content = createResource(gasDensities[j]);
+		}
+	}
+	else if (id == "truncated_pentachoron") {
+		block->slots.clear();
+		shared_ptr<Item> menu = createItem({ "plinth_resource",(128 << 16) | '!',{},1 });
+		vector<string> keys;
+		for (const auto& a : resourceColors) {
+			keys.push_back(a.first);
+		}
+		sort(keys.begin(), keys.end());
+		vector<Slot> slots;
+		for (int i = 0; i < keys.size();i++) {
+			slots.push_back({ 1,createResource(keys[i])});
+		}
+		while(slots.size()) {
+			shared_ptr<Item> submenu = createItem({ "plinth_resource",(128 << 16) | '!',{},1 });
+			for (int j = 0; j < 10&&slots.size(); j++) {
+				submenu->slots.push_back(slots[slots.size()-1]);
+				slots.pop_back();
+			}
+			menu->slots.push_back({ 1,submenu });
+		}
+		block->slots.push_back({ 1,menu });
+		for (int i = 0; i < printerOrder.size(); i++) {
+			auto& recipes = printerRecipes[printerOrder[i]];
+			shared_ptr<Item> menu = createItem({ "plinth_" + printerOrder[i],(128<<16)|'!',{},1});
+			for (int j = 0; j < recipes.size(); j++) {
+				auto item = resourceShortHand(createItem(recipes[j].second));
+				menu->slots.push_back({ item->size,item});
+			}
+			block->slots.push_back({ 1,menu });
+		}
+		block->slots.push_back({ 1,createItem({ "plinth_void",(128 << 16) | '!',{{4,nullptr,false,"air",true}},1})});
 	}
 }
 void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
@@ -1297,9 +1394,10 @@ struct Mod {
 	unordered_map<string, vector<int>> power;
 	unordered_map<string, unsigned char> resourceColors;
 	unordered_map<string, PlanetMod> planets;
+	unordered_map<string, int> consumers;
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("description", description), make_nvp("recipes", recipes), make_nvp("power", power), make_nvp("resourceColors", resourceColors), make_nvp("planets", planets));
+		ar(make_nvp("description", description), make_nvp("recipes", recipes), make_nvp("power", power), make_nvp("resourceColors", resourceColors), make_nvp("planets", planets), make_nvp("consumers", consumers));
 	}
 };
 void loadMods() {
