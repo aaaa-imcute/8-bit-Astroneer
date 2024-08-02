@@ -6,14 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libraries", "libraries\libraries.vcxproj", "{F2C59D3C-DC48-4EC0-953F-8727B847A9D6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "game\game.vcxproj", "{03B133A2-C1DA-48D9-9226-F971F02CD9EA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F2C59D3C-DC48-4EC0-953F-8727B847A9D6} = {F2C59D3C-DC48-4EC0-953F-8727B847A9D6}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "debug", "debug\debug.vcxproj", "{C89E65F1-F367-4EC2-B537-18D200B84DA2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F2C59D3C-DC48-4EC0-953F-8727B847A9D6} = {F2C59D3C-DC48-4EC0-953F-8727B847A9D6}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -26,6 +26,7 @@ int main() {
 			{1,make_shared<Item>(Item{ "platform_pacemaker",(255 << 16) | '@',{{2,nullptr,false,"oxygenator"}},1}),true},
 			{1,make_shared<Item>(Item{ "player_printer",(255 << 16) | '@',{{1,nullptr},{1,nullptr}},1,0,0}),true},
 		},256 }, player.x, player.y, player.z);
+		saveGame();
 	}
 	while (1) {
 		string temp = eventLoop();

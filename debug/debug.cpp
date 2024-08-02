@@ -1,4 +1,3 @@
-//Debug file
 #include"main.hpp"
 int main() {
 	init();
@@ -42,6 +41,7 @@ int main() {
 		planets["Sylva"].setBlock({ "battery_small",(255 << 16) | '@',{},1 ,0,1 }, 2, 5, 0);
 		player.updates.push_back({ "Sylva",0,0,0 });
 		player.updates.push_back({ "Sylva",1,1,0 });
+		saveGame();
 	}
 	while (1) {
 		string temp = eventLoop();
