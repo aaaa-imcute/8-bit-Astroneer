@@ -769,7 +769,7 @@ void processCursor() {
 			if (block == nullptr)break;
 			for (auto& i : block->slots) {
 				if (i.content != nullptr)continue;
-				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size < player.item->slots[3].content->size))continue;
 				//potential lack of sorter check?
 				i.content = player.item->slots[3].content;
 				player.item->slots[3].content = nullptr;
@@ -824,7 +824,7 @@ void processCursor() {
 			if (player.item->slots[3].content == nullptr)break;
 			auto& i = player.item->slots[cursorSel];
 			if (i.content != nullptr)break;
-			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
+			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size < player.item->slots[3].content->size))break;
 			i.content = player.item->slots[3].content;
 			player.item->slots[3].content = nullptr;
 			player.updates.push_back({ player.planet,player.x,player.y,player.z });
@@ -833,7 +833,7 @@ void processCursor() {
 			if (player.item->slots[3].content == nullptr)break;
 			for (auto& i : player.item->slots) {
 				if (i.content != nullptr)continue;
-				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size < player.item->slots[3].content->size))continue;
 				i.content = player.item->slots[3].content;
 				player.item->slots[3].content = nullptr;
 				player.updates.push_back({ player.planet,player.x,player.y,player.z });
@@ -867,10 +867,22 @@ void processCursor() {
 		if (key == 'b') {
 			if (cursorObj->slots[cursorSel].content == nullptr)break;
 			if (cursorObj->slots[cursorSel].locked)break;
-			if (player.item->slots[3].content != nullptr)break;
-			if (player.item->slots[3].size < cursorObj->slots[cursorSel].content->size)break;
-			player.item->slots[3].content = cursorObj->slots[cursorSel].content;
-			cursorObj->slots[cursorSel].content = nullptr;
+			if (player.item->slots[3].content != nullptr) {
+				if (player.item->slots[3].content->id != "soil" || cursorObj->slots[cursorSel].content->id != "soil")break;
+				int diff = cursorObj->slots[cursorSel].content->dmg;
+				player.item->slots[3].content->dmg += diff;
+				cursorObj->slots[cursorSel].content->dmg -= diff;
+				if (player.item->slots[3].content->dmg > 256) {
+					cursorObj->slots[cursorSel].content->dmg += player.item->slots[3].content->dmg - 256;
+					player.item->slots[3].content->dmg = 256;
+				}
+				if (cursorObj->slots[cursorSel].content->dmg == 0)cursorObj->slots[cursorSel].content = nullptr;
+			}
+			else {
+				if (player.item->slots[3].size < cursorObj->slots[cursorSel].content->size)break;
+				player.item->slots[3].content = cursorObj->slots[cursorSel].content;
+				cursorObj->slots[cursorSel].content = nullptr;
+			}
 			player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
 			player.updates.push_back({ player.planet,player.x,player.y,player.z });
 		}
@@ -879,7 +891,7 @@ void processCursor() {
 			if (player.item->slots[3].content == nullptr)break;
 			auto& i = cursorObj->slots[cursorSel];
 			if (i.content != nullptr)break;
-			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
+			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size < player.item->slots[3].content->size))break;
 			i.content = player.item->slots[3].content;
 			player.item->slots[3].content = nullptr;
 			player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
@@ -890,11 +902,11 @@ void processCursor() {
 			if (cursorObj->slots[cursorSel].content->id != "soil")break;
 			if (cursorObj->slots[cursorSel].locked)break;
 			if (player.item->slots[3].content != nullptr && player.item->slots[3].content->id != "soil")break;
-			if (player.item->slots[3].size < cursorObj->slots[cursorSel].content->size)break;
 			if (player.item->slots[3].content == nullptr)player.item->slots[3].content = createItem({ "soil",(255 << 16) | '-',{},1 });
-			player.item->slots[3].content->dmg += cursorObj->slots[cursorSel].content->dmg / 2;
-			cursorObj->slots[cursorSel].content->dmg /= 2;
-			if (player.item->slots[3].content->dmg > 255) {
+			int diff = cursorObj->slots[cursorSel].content->dmg / 2;
+			player.item->slots[3].content->dmg += diff;
+			cursorObj->slots[cursorSel].content->dmg -= diff;
+			if (player.item->slots[3].content->dmg > 256) {
 				cursorObj->slots[cursorSel].content->dmg += player.item->slots[3].content->dmg - 256;
 				player.item->slots[3].content->dmg = 256;
 			}
@@ -908,10 +920,10 @@ void processCursor() {
 			auto& i = cursorObj->slots[cursorSel];
 			if (i.content != nullptr && player.item->slots[3].content->id != "soil")break;
 			if (i.content == nullptr)i.content = createItem({ "soil",(255 << 16) | '-',{},1 });
-			if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))break;
-			i.content->dmg += player.item->slots[3].content->dmg / 2;
-			player.item->slots[3].content->dmg /= 2;
-			if (i.content->dmg > 255) {
+			int diff = player.item->slots[3].content->dmg / 2;
+			i.content->dmg += diff;
+			player.item->slots[3].content->dmg -= diff;
+			if (i.content->dmg > 256) {
 				player.item->slots[3].content->dmg += i.content->dmg - 256;
 				i.content->dmg = 256;
 			}
@@ -923,7 +935,7 @@ void processCursor() {
 			if (player.item->slots[3].content == nullptr)break;
 			for (auto& i : cursorObj->slots) {
 				if (i.content != nullptr)continue;
-				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size > player.item->slots[3].content->size))continue;
+				if (i.size != player.item->slots[3].content->size && (!i.uni || i.size < player.item->slots[3].content->size))continue;
 				i.content = player.item->slots[3].content;
 				player.item->slots[3].content = nullptr;
 				player.updates.push_back({ cursorObjplanet,cursorObjx,cursorObjy,cursorObjz });
@@ -1314,6 +1326,7 @@ void processMisc(Update u, shared_ptr<Item>& block, bool slotted) {
 			}
 			menu->slots.push_back({ 1,submenu });
 		}
+		menu->slots.push_back({ 1,createItem({ "soil",(255 << 16) | '-',{},1 ,256,0}) });
 		block->slots.push_back({ 1,menu });
 		for (int i = 0; i < printerOrder.size(); i++) {
 			auto& recipes = printerRecipes[printerOrder[i]];
