@@ -27,20 +27,7 @@ int main() {
 		},256 }, 0, 0, 0);
 		player.x = player.y = player.z = 0;
 		player.planet = "Sylva";
-		planets["Sylva"].setBlock({ "test_l_weighted_cube",(255 << 16) | '#',{},3 }, 0, 1, 0);
-		planets["Sylva"].setBlock({ "platform_pacemaker",(255 << 16) | '@',{},1 }, 1, 1, 0);
-		planets["Sylva"].setBlock({ "platform_test_siren",(0 << 16) | '@',{},1 }, 2, 1, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "canister",16711715,{{1,nullptr},{1,nullptr}},2 ,0,32}),false,"air",true}}, 2 }, 1, 2, 0);
-
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "canister_resin",16711715,{{1,nullptr},{1,nullptr}},2 ,3,32}),false,"air",true}}, 2
-			}, 1, 4, 0);
-		planets["Sylva"].setBlock({ "platform_power_extenders",15007779,{},1 }, 1, 6, 0);
-		planets["Sylva"].setBlock({ "test_power_void",(255 << 16) | '@',{},1 ,0,10 }, 1, 7, 0);
-		planets["Sylva"].setBlock({ "platform_medium_a",(255 << 16) | '#', {{1,createItem({ "test_power_source",(255 << 16) | '@',{},1 ,0,10}),false,"air",true}}, 2
-			}, 2, 4, 0);
-		planets["Sylva"].setBlock({ "battery_small",(255 << 16) | '@',{},1 ,0,1 }, 2, 5, 0);
 		player.updates.push_back({ "Sylva",0,0,0 });
-		player.updates.push_back({ "Sylva",1,1,0 });
 		saveGame();
 	}
 	while (1) {

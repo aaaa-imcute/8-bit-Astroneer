@@ -163,7 +163,7 @@ struct Item {
 	vector<int> _getFacing();
 	template<class Archive>
 	void serialize(Archive& ar) {
-		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg), make_nvp("sig", sig));
+		ar(make_nvp("id", id), make_nvp("display", display), make_nvp("slots", slots), make_nvp("size", size), make_nvp("dmg", dmg), make_nvp("cfg", cfg), make_nvp("sig", sig), make_nvp("ptr", ptr));
 	}
 };
 struct Slot {
@@ -548,7 +548,7 @@ void displayItem(shared_ptr<Item>& item, int x, int y) {
 	}
 	else {
 		clearRect(x, y, max(int(item->id.size()), 12), int(item->slots.size()) + 2);
-		for (int i = 0; i < item->id.size(); i++)buf[y][x + i] = (255 << 16) | (item->id[i]);
+		for (int i = 0; i < item->id.size(); i++)buf[y][x + i] = ((item->sig&1?128:255) << 16) | (item->id[i]);
 	}
 	displayNumber(item->size, x, y + 1);
 	displayNumber(item->dmg, x + 4, y + 1);
@@ -1246,14 +1246,24 @@ void processMisc(Update u, shared_ptr<Item>& block, bool slotted) {
 		}
 	}
 	else if (id == "repeater_delay") {
-		if (block->dmg >= 0)block->dmg++;
-		if (block->dmg >= block->cfg) {
-			block->dmg = -1;
-			if (block->ptr == nullptr)return;
-			u.flags = 2;
-			processUpdate(u, block->ptr);
+		if (!u.flags) {
+			if (block->dmg >= 0) {
+				block->dmg++;
+				player.updates.push_back(u);
+			}
+			if (block->dmg >= block->cfg) {
+				block->dmg = -1;
+				if (block->ptr == nullptr)return;
+				u.flags = 2;
+				processUpdate(u, block->ptr);
+				u.flags = 0;
+			}
 		}
-		if (block->dmg == -1 && u.flags & 2)block->dmg = 0;
+		if (block->dmg == -1 && u.flags & 2) {
+			block->dmg = 0;
+			u.flags = 0;
+			player.updates.push_back(u);
+		}
 	}
 	else if (id == "repeater_count") {
 		if (u.flags & 2)block->dmg++;
@@ -1437,6 +1447,9 @@ void loadMods() {
 		for (auto& r : m.planets) {
 			planetSettings[r.first] = r.second;
 		}
+		for (auto& r : m.consumers) {
+			consumers[r.first] = r.second;
+		}
 	}
 }
 void generateTemplateDatapack() {
@@ -1498,4 +1511,4 @@ string eventLoop() {
 		temp += "\n";
 	}
 	return temp;
-}
+};

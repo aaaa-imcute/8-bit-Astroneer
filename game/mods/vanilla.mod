@@ -292,7 +292,7 @@
                             "display": 7077952,
                             "slots": [],
                             "size": 1,
-                            "dmg": 0,
+                            "dmg": -1,
                             "cfg": 0,
                             "sig": 0,
                             "ptr": {
