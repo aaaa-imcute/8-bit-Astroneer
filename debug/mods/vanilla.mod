@@ -3082,7 +3082,7 @@
                         },
                         {
                             "ores": [
-                                "clay",
+                                "ceramic",
                                 "iron",
                                 "astronium"
                             ],
@@ -3152,7 +3152,7 @@
                         },
                         {
                             "ores": [
-                                "clay",
+                                "ceramic",
                                 "iron",
                                 "astronium"
                             ],
@@ -3222,7 +3222,7 @@
                         },
                         {
                             "ores": [
-                                "clay",
+                                "ceramic",
                                 "iron",
                                 "astronium"
                             ],
@@ -3292,7 +3292,7 @@
                         },
                         {
                             "ores": [
-                                "clay",
+                                "ceramic",
                                 "iron",
                                 "astronium"
                             ],
@@ -3362,7 +3362,7 @@
                         },
                         {
                             "ores": [
-                                "clay",
+                                "ceramic",
                                 "iron",
                                 "astronium"
                             ],
@@ -3424,7 +3424,7 @@
                         },
                         {
                             "ores": [
-                                "clay",
+                                "ceramic",
                                 "iron",
                                 "astronium"
                             ],

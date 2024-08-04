@@ -667,7 +667,7 @@ void processUpdate(Update u, shared_ptr<Item>& block);
 void processUpdate(Update u);
 void processCursor() {
 	vector<string> dirs = { "platform_power_extenders","platform_auto_arm" ,"platform_long_auto_arm" ,"platform_fast_auto_arm" };
-	if (cursorObj != nullptr && (printerRecipes.find(cursorObj->id) != printerRecipes.end() || cursorObj->id == "repeater_delay" || cursorObj->id == "repeater_count")) {
+	if (cursorObj != nullptr && (printerRecipes.find(cursorObj->id) != printerRecipes.end() || cursorObj->id == "repeater_delay" || cursorObj->id == "repeater_count" || cursorObj->id == "platform_rocket_small" || cursorObj->id == "platform_rocket_large")) {
 		if (key == 'y')cursorObj->cfg++;
 		if (key == 'h')cursorObj->cfg--;
 	}
@@ -1155,10 +1155,10 @@ void processRocket(Update u, int eff) {
 	}
 	if (u.flags & 2 && u.getBlock()->dmg >= 2) {
 		u.getBlock()->dmg -= 2;
-		shuttleItem(u, planetNames[u.getBlock()->cfg]);
 		if (u.getBlock()->ptr != nullptr && u.getBlock()->ptr->size == 256) {//anti-dumbdumb design,not going to launch player if they dont intend to
 			shuttleItem({ player.planet,player.x,player.y,player.z }, planetNames[u.getBlock()->cfg]);
 		}
+		shuttleItem(u, planetNames[u.getBlock()->cfg]);
 	}
 }
 vector<string> gasDensities = { "hydrogen","helium","methane","propane","oleum" };
