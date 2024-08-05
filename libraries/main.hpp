@@ -1302,7 +1302,7 @@ void processMisc(Update u, shared_ptr<Item>& block, bool slotted) {
 			flight = true;
 		}
 	}
-	else if (id == "atmospheric_condensor") {
+	else if (id == "atmospheric_condenser") {
 		block->dmg += u.lackPower(32);
 		if (block->dmg > 256)block->dmg = 256;
 		if (block->dmg == 256) {
@@ -1363,10 +1363,10 @@ void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 		if (find(network.begin(), network.end(), t) != network.end())continue;
 		if (t.getBlock() == nullptr)continue;
 		network.push_back(t);
-		if (t.getBlock()->id == "player_oxygen_tank" && block->slots[0].content != nullptr)t.getBlock()->dmg = 90;
 		if (t.getBlock()->id == "platform_power_extenders") {
 			for (int i = 0; i < 16; i++) {
 				Update x = t.getBlock()->getFacing(t, i);
+				if (x.getBlock() == player.item && block->slots[0].content != nullptr)x.getBlock()->slots[0].content->dmg = 90;
 				if (x.getBlock() == nullptr || !x.getBlock()->id.starts_with("platform_"))continue;
 				queue.push_back(x);
 			}
@@ -1375,6 +1375,7 @@ void processPacemaker(Update u, shared_ptr<Item> block, bool slotted) {
 		auto n = t.neighbors();
 		for (int i = 0; i < 6; i++) {
 			Update x = n[i];
+			if (x.getBlock() == player.item && block->slots[0].content != nullptr)x.getBlock()->slots[0].content->dmg = 90;
 			if (x.getBlock() == nullptr || !x.getBlock()->id.starts_with("platform_"))continue;
 			queue.push_back(x);
 		}

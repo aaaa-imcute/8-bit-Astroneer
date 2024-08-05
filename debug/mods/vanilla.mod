@@ -2797,7 +2797,7 @@
                 ]
             },
             {
-                "key": "atmospheric_condensor",
+                "key": "atmospheric_condenser",
                 "value": [
                     0,
                     120,
