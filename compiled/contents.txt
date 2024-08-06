@@ -1,0 +1,3 @@
+so game is the game,debug is the game but in debug mode(creative mode?).also I've heard that the pdb files are useful somehow?(probably not since you have the source code)
+not compiled for other operating systems bc i dont have them in vmware box,do it urself ig
+also this is not called bin because git wont want to upload that :<
